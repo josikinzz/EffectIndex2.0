@@ -1,0 +1,28 @@
+[
+  {
+    "_id": {
+      "$oid": "5b41003638dd2242a72c8eee"
+    },
+    "author": "Viscid",
+    "datetime": {
+      "$date": "2018-07-07T18:02:30.681Z"
+    },
+    "title": "Welcome to the Effect Index",
+    "body": "We are pleased to announce the launch of [Effect Index](/), a new project which is dedicated to pioneering and establishing the field of formalised Subjective Effect Documentation, wherein all aspects of the hallucinogenic experience are examined, defined, and analyzed by knowledgeable people in the field who provide rational, evidence based, and data-driven insights into the many components that make up the experience. \n\nThe Subjective Effect Index, where all effects that may be experienced on hallucinogens are listed and described, was previously hosted on [PsychonautWiki](https://psychonautwiki.org) and [DisregardEverythingISay](http://disregardeverythingisay.com), however, the project has become large enough to deserve its own dedicated platform.\n\nWe believe that providing documentation and analysis of subjective effects is an important endeavour, as through the use of a universal terminology set the psychonautic subculture can finally formally discuss that which was previous considered indescribable. In doing so we may help to demystify the psychedelic experience, which has the potential to allow hallucinogen usage to become more culturally acceptable, better understood, and create a platform on top of which these substances may be more easily studied. For more information please see our [about](/about) page.\n\n~[The Effect Index team](/profiles)",
+    "slug": "welcome-to-the-effect-index",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5c522e27ef61181624530e25"
+    },
+    "slug": "site-updates",
+    "author": "josikinz",
+    "datetime": {
+      "$date": "2019-01-30T23:07:19.231Z"
+    },
+    "title": "Site updates",
+    "body": "After a several month hiatus due to personal issues, we are getting back on track with utilising this project as a means of furthering the field of subjective effect documentation. Although there is still room for many significant improvements, we are happy to announce that the first version of the subjective effect index is completed, formatted, and proofread. \n\nThe next step is to apply this SEI to specific psychoactive substances in order to document their phenomenological effects in a comprehensive and formalised manner. This will require the creation of a standardized methodology that involves a small team of people ingesting these substances at a range of dosages and documenting their experiences through the use of consistently formatted trip reports which are accompanied by the information produced by our [SEI form system](https://docs.google.com/forms/d/1VdkmHgkng78fPrpqIFd7qDti5B7ml_oD8ZFiHbid8w0/). We will then analyse the collected data and produce articles that detail the effects which are induced at specific dosage ranges, their levels of intensity, style variations, and approximate frequency of occurrence. \n\nThis will hopefully demonstrate that the SEI is not only useful for increasing our collective understanding of specific subjective effects but that it is also capable of being used as a tool for analysing and documenting the various compounds which trigger them.\n\n~[The Effect Index team](/profiles)",
+    "__v": 0
+  }
+]

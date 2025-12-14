@@ -1,0 +1,24 @@
+# dependencies
+node_modules
+
+# logs
+npm-debug.log
+
+# Nuxt build
+.nuxt
+
+# Nuxt generate
+dist
+
+# Service Worker
+sw.js
+
+static/img/**
+static/audio/**
+
+.DS_Store
+
+.env
+ecosystem.config.js
+.directory
+.idea/

@@ -1,0 +1,167 @@
+[
+  {
+    "_id": {
+      "$oid": "611abfdf452e573c764e2bf9"
+    },
+    "roles": [
+      "admin"
+    ],
+    "username": "Maethor",
+    "hash": "$2a$10$grYF3U1J/BMdwLuDkWR5lOTL8CGNRWJhhC7oYA78Spnc0HLRd0Tzu",
+    "__v": 1,
+    "identity": {
+      "$oid": "611ac02a452e573c764e2c54"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "62f67fab2006b766d6bd2aaa"
+    },
+    "roles": [
+      "reports"
+    ],
+    "username": "arrall",
+    "hash": "$2a$10$sGO4uCdTripFVoXgOFxKHeUqZaTSVjJ8cODbl9ZHieFswOOR.Wwjy",
+    "__v": 1
+  },
+  {
+    "_id": {
+      "$oid": "6117e977bb4f7a6302114015"
+    },
+    "roles": [
+      "admin"
+    ],
+    "username": "Viscid",
+    "hash": "$2a$10$lMZtTWgpM/xN.oFu917vCOyU/0qXjRT55P9hshyXmKmdS2K6pXIsi",
+    "__v": 2,
+    "identity": {
+      "$oid": "6117ff9ebb4f7a630211447f"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "62dfe306bfd049284e8bd89d"
+    },
+    "roles": [
+      "reports"
+    ],
+    "username": "Moonbear",
+    "hash": "$2a$10$A2gCwTw.ou3sp4nwQJ0n/uLu1mtDlQJD1DDeCpxQ5lnIqk0BVMGFq",
+    "__v": 1
+  },
+  {
+    "_id": {
+      "$oid": "61019f71bb4f7a63020e80cb"
+    },
+    "roles": [
+      "admin"
+    ],
+    "username": "admin",
+    "hash": "$2a$10$RQMnuiWEsLmAzk9cpOEQge2uKhb/MvH4xeFX9SGFJ1HnczYNFunHW",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6117e95cbb4f7a6302114003"
+    },
+    "roles": [
+      "reports",
+      "effects"
+    ],
+    "username": "utheraptor",
+    "hash": "$2a$10$CGSrS7UyeO3G6yVCkljtLO5I4e/mFsGO7heST31VLlvpQsiZCJhuO",
+    "__v": 2,
+    "identity": {
+      "$oid": "611a86d9452e573c764e2342"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "62f673602006b766d6bd262e"
+    },
+    "roles": [
+      "reports"
+    ],
+    "username": "myco",
+    "hash": "$2a$10$JGHUOIops4T.cLF/fqJsAuqsNFv9w.MBxxHjcc939EEG6OMhOb5NS",
+    "__v": 1
+  },
+  {
+    "_id": {
+      "$oid": "639bff87c8fe6d0440b0b629"
+    },
+    "roles": [
+      "admin",
+      "reports"
+    ],
+    "username": "sernyl",
+    "hash": "$2a$10$xjH0y60Oog4cj.lxVchBsOaaTB5JGyYvk7k8jdrNlNO/H6Cj0Jh2a",
+    "__v": 1
+  },
+  {
+    "_id": {
+      "$oid": "630fb2842006b766d6c244a7"
+    },
+    "roles": [
+      "reports"
+    ],
+    "username": "LeftoverNinja",
+    "hash": "$2a$10$Z07gEMyyBPXUI42SuWsJiObHDN2n0ZhK2iuPdsVyYJ8m4.Wc2BwaS",
+    "__v": 1
+  },
+  {
+    "_id": {
+      "$oid": "65974c6f96cfbfebf12b5481"
+    },
+    "username": "swirnyl",
+    "email": "lex@sojourns.io",
+    "verificationStatus": "verified",
+    "hash": "$2a$10$nI4yvDNemZIKO4UooBw9pejpuDHPh7wgwIGvERTxU5wKmzNfvXpE.",
+    "roles": [],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "659882e90240498f32df0834"
+    },
+    "username": "shermyl",
+    "email": "hello@sernyl.io",
+    "verificationStatus": "verified",
+    "hash": "$2a$10$VJ8YX6YfPN3gdW.VZ7z04udWRUKu6rbaq93DLHTYNOVL15xN8VFRe",
+    "roles": [],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65988796c688e7bf8d60b7d0"
+    },
+    "username": "sernyl2",
+    "email": "sphota9@gmail.com",
+    "verificationStatus": "verified",
+    "hash": "$2a$10$zOxFRQpkdBmUrmf787F4muCCddrtIEW.EpJJG3uU8y16JWe8XPpF2",
+    "roles": [],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65d2d3eed500e34b2971156a"
+    },
+    "username": "test1",
+    "email": "lex@mindstate.design",
+    "verificationStatus": "verified",
+    "hash": "$2a$10$77bzF41bFx8thGAMQwPqU.bntwUkIYg42CO1WI9c.cgZEofPaAK76",
+    "roles": [],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "66b6448994c084b220b33ef1"
+    },
+    "username": "serrnyl4",
+    "email": "sernyl@bluelight.org",
+    "verificationStatus": "verified",
+    "hash": "$2a$10$xElyqV29kTJuUPG6eGNC8OUkNbLHUpu47mj9Rm5TEZNFL.K2G.dUq",
+    "roles": [],
+    "__v": 0
+  }
+]

@@ -1,0 +1,164 @@
+[
+  {
+    "_id": {
+      "$oid": "6117ff9ebb4f7a630211447f"
+    },
+    "user": {
+      "$oid": "6117e977bb4f7a6302114015"
+    },
+    "full_name": "Mark Gillis",
+    "alias": "Viscid",
+    "profile_url": "viscid",
+    "social_media": [],
+    "bio": {
+      "_id": {
+        "$oid": "6403c8eccf38661c6c75d2af"
+      },
+      "length": 25,
+      "parsed": "[\"I developed the software.\"]",
+      "raw": "I developed the software."
+    },
+    "__v": 1,
+    "featured": true,
+    "role": "Former Dev",
+    "tags": [],
+    "profile_image": "img/profiles/6117e977bb4f7a6302114015/75baf1087b0be4a7.jpeg"
+  },
+  {
+    "_id": {
+      "$oid": "60542430198361300fea3610"
+    },
+    "bio_parsed": [],
+    "tags": [],
+    "not_public": true,
+    "full_name": "Josie Kins",
+    "alias": "Josikinz",
+    "email": "disregardeverythingisay@gmail.com",
+    "social_media": [
+      {
+        "type": "reddit",
+        "_id": {
+          "$oid": "60570f8534555a5df506dc55"
+        },
+        "value": "https://reddit.com/u/josikins"
+      },
+      {
+        "type": "twitter",
+        "_id": {
+          "$oid": "60570f8534555a5df506dc56"
+        },
+        "value": "https://twitter.com/josikinz"
+      },
+      {
+        "type": "personal",
+        "_id": {
+          "$oid": "61199fe868a28c38c14d411b"
+        },
+        "value": ""
+      }
+    ],
+    "bio": {
+      "_id": {
+        "$oid": "64d05b22bc700c6d164d5fc9"
+      },
+      "length": 472,
+      "parsed": "[{\"name\":\"p\",\"properties\":{},\"children\":[\"Hey there, my name is Josie Kins. I am the person who created and wrote the subjective effect index. I also founded this website alongside of psychonautwiki.org and disregardeverythingisay.com.\"]},\"\\n\\n\",{\"name\":\"p\",\"properties\":{},\"children\":[\"If you need to contact or stalk me you can find my various handles below:\"]},\"\\n\\n\",{\"name\":\"ul\",\"properties\":{},\"children\":[\"\\n  \",{\"name\":\"li\",\"properties\":{},\"children\":[\"Twitter: \",{\"name\":\"ext-link\",\"properties\":{\"to\":\"https://twitter.com/josikinz\"},\"children\":[\"josikinz\"]}]},\"\\n  \",{\"name\":\"li\",\"properties\":{},\"children\":[\"Reddit: \",{\"name\":\"ext-link\",\"properties\":{\"to\":\"https://www.reddit.com/user/josikins/\"},\"children\":[\"u/josikins\"]}]},\"\\n\"]}]",
+      "raw": "[p]Hey there, my name is Josie Kins. I am the person who created and wrote the subjective effect index. I also founded this website alongside of psychonautwiki.org and disregardeverythingisay.com.[/p]\n\n[p]If you need to contact or stalk me you can find my various handles below:[/p]\n\n[ul]\n  [li]Twitter: [ext-link to=\"https://twitter.com/josikinz\"]josikinz[/ext-link][/li]\n  [li]Reddit: [ext-link to=\"https://www.reddit.com/user/josikins/\"]u/josikins[/ext-link][/li]\n[/ul]"
+    },
+    "gravatar_hash": "e417ad842c0bd3bccdcaa6e595da9e3f",
+    "__v": 5,
+    "profile_url": "josie",
+    "featured": true,
+    "role": "Founder",
+    "profile_image": "img/profiles/61019f71bb4f7a63020e80cb/bce50e65f34c4256.png"
+  },
+  {
+    "_id": {
+      "$oid": "611ac02a452e573c764e2c54"
+    },
+    "user": {
+      "$oid": "611abfdf452e573c764e2bf9"
+    },
+    "alias": "Maethor",
+    "profile_url": "maethor",
+    "social_media": [
+      {
+        "type": "reddit",
+        "_id": {
+          "$oid": "611ac084452e573c764e2c8a"
+        },
+        "value": "/u/maethor1337"
+      },
+      {
+        "type": "discord",
+        "_id": {
+          "$oid": "611ac084452e573c764e2c8b"
+        },
+        "value": "Subsequently#6930"
+      }
+    ],
+    "bio": {
+      "_id": {
+        "$oid": "62a6a69772bcc03a19a83e48"
+      },
+      "length": 529,
+      "parsed": "[{\"name\":\"p\",\"properties\":{},\"children\":[\"I’m a software developer, primarily focused on mobile app development but I sometimes get tricked into doing some web stuff too. I’ve contributed as a developer and systems administrator for Effect Index in the past.\"]},\"\\n\\n\",{\"name\":\"p\",\"properties\":{},\"children\":[\"My current interests are the subjective effects we consider commonplace in sober living yet distinctly differ from “normal” consciousness when closely observed, and the nature of awareness itself.\"]},\"\\n\\n\",{\"name\":\"p\",\"properties\":{},\"children\":[\"If you need to get a hold of me, I’m /u/maethor1337, or you can find me in our Discord chat.\"]}]",
+      "raw": "[p]I’m a software developer, primarily focused on mobile app development but I sometimes get tricked into doing some web stuff too. I’ve contributed as a developer and systems administrator for Effect Index in the past.[/p]\n\n[p]My current interests are the subjective effects we consider commonplace in sober living yet distinctly differ from “normal” consciousness when closely observed, and the nature of awareness itself.[/p]\n\n[p]If you need to get a hold of me, I’m /u/maethor1337, or you can find me in our Discord chat.[/p]"
+    },
+    "__v": 11,
+    "tags": [],
+    "profile_image": "img/profiles/611abfdf452e573c764e2bf9/f736de2dfaa1f429.jpeg",
+    "featured": true,
+    "role": "Former Dev",
+    "isPrivate": false
+  },
+  {
+    "_id": {
+      "$oid": "611a86d9452e573c764e2342"
+    },
+    "tags": [],
+    "user": {
+      "$oid": "6117e95cbb4f7a6302114003"
+    },
+    "full_name": "utheraptor",
+    "alias": "utheraptor",
+    "email": "utheraptor@gmail.com",
+    "gravatar_hash": "4e6d1e0a39a6543e98773d2067bf6680",
+    "profile_url": "utheraptor",
+    "social_media": [
+      {
+        "type": "instagram",
+        "_id": {
+          "$oid": "611a86d9452e573c764e2343"
+        },
+        "value": "utheraptor"
+      },
+      {
+        "type": "reddit",
+        "_id": {
+          "$oid": "611a86d9452e573c764e2344"
+        },
+        "value": "u/utheraptor"
+      },
+      {
+        "type": "facebook",
+        "_id": {
+          "$oid": "611a86d9452e573c764e2345"
+        },
+        "value": "martin.u.durt"
+      }
+    ],
+    "profile_image": "img/profiles/6117e95cbb4f7a6302114003/787f97dccdfcc74b.png",
+    "bio": {
+      "_id": {
+        "$oid": "6277148c1f9ae065728e0acd"
+      },
+      "length": 1243,
+      "parsed": "[{\"name\":\"p\",\"properties\":{},\"children\":[\"Hello, I am Uther.\"]},\"\\n\\n\",{\"name\":\"p\",\"properties\":{},\"children\":[\"I am many things - an artist, a blogger, a harm-reduction advisor... and, of course, a fellow psychonaut. I strongly believe that drugs tell us something fundamental about how the human mind works, and that by exploring their various effects both on the brain and the subjective self, we can untangle a part of the great mystery that the cosmos presents us with.\"]},\"\\n\\n\",{\"name\":\"p\",\"properties\":{},\"children\":[\"One of my dreams is to help establish psychonautics as a real, reasonable academic field - this is the reason why I take part in this project. For EffectIndex, I mainly provide formal phenomenological reports on various substances, novel and classic, in hopes that I will help document their nature, and thus aid people in using them responsibly for personal growth or even just plain old fun.\"]},\"\\n\\n\",{\"name\":\"p\",\"properties\":{},\"children\":[\"I don't bite, and if you feel like reaching out, please do. I will always try to respond, even if I am really buried in stuff. :)\"]},\"\\n\\n\",{\"name\":\"ul\",\"properties\":{},\"children\":[\"\\n  \",{\"name\":\"li\",\"properties\":{},\"children\":[\"Instagram: \",{\"name\":\"ext-link\",\"properties\":{\"to\":\"https://www.instagram.com/utheraptor/\"},\"children\":[\"utheraptor\"]}]},\"\\n  \",{\"name\":\"li\",\"properties\":{},\"children\":[\"Reddit: \",{\"name\":\"ext-link\",\"properties\":{\"to\":\"https://www.reddit.com/user/utheraptor/\"},\"children\":[\"u/utheraptor\"]}]},\"\\n  \",{\"name\":\"li\",\"properties\":{},\"children\":[\"Facebook: \",{\"name\":\"ext-link\",\"properties\":{\"to\":\"https://www.facebook.com/martin.u.durt\"},\"children\":[\"martin.u.durt\"]}]},\"\\n\"]}]",
+      "raw": "[p]Hello, I am Uther.[/p]\n\n[p]I am many things - an artist, a blogger, a harm-reduction advisor... and, of course, a fellow psychonaut. I strongly believe that drugs tell us something fundamental about how the human mind works, and that by exploring their various effects both on the brain and the subjective self, we can untangle a part of the great mystery that the cosmos presents us with.[/p]\n\n[p]One of my dreams is to help establish psychonautics as a real, reasonable academic field - this is the reason why I take part in this project. For EffectIndex, I mainly provide formal phenomenological reports on various substances, novel and classic, in hopes that I will help document their nature, and thus aid people in using them responsibly for personal growth or even just plain old fun.[/p]\n\n[p]I don't bite, and if you feel like reaching out, please do. I will always try to respond, even if I am really buried in stuff. :)[/p]\n\n[ul]\n  [li]Instagram: [ext-link to=\"https://www.instagram.com/utheraptor/\"]utheraptor[/ext-link][/li]\n  [li]Reddit: [ext-link to=\"https://www.reddit.com/user/utheraptor/\"]u/utheraptor[/ext-link][/li]\n  [li]Facebook: [ext-link to=\"https://www.facebook.com/martin.u.durt\"]martin.u.durt[/ext-link][/li]\n[/ul]"
+    },
+    "__v": 3,
+    "featured": true,
+    "role": "Neural Network Dev"
+  }
+]

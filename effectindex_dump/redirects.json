@@ -1,0 +1,122 @@
+[
+  {
+    "_id": {
+      "$oid": "6068a7722d5ee40fc6ec5c65"
+    },
+    "from": "effects/external-hallucinations",
+    "to": "effects/external-hallucination",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6068a79b2d5ee40fc6ec5c67"
+    },
+    "from": "effects/internal-hallucinations",
+    "to": "effects/internal-hallucination",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "626aca211f9ae065728c0865"
+    },
+    "from": "substances/dxm",
+    "to": "articles/dxm",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6067c5819945d40567f7f3b8"
+    },
+    "from": "effects/psychedelic-therapy",
+    "to": "articles/psychedelic-therapy",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6068a7842d5ee40fc6ec5c66"
+    },
+    "from": "effects/autonomous-entities",
+    "to": "effects/autonomous-entity",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6080e26fd705511af350565e"
+    },
+    "from": "effects/psychedlic-intensity-scale",
+    "to": "articles/psychedlic-intensity-scale",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "60ecc61dca10872ffc40686c"
+    },
+    "from": "effects/time-reversal",
+    "to": "effects/time-distortion?s=time-reversal",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "626aca821f9ae065728c088d"
+    },
+    "from": "substances/dmt",
+    "to": "articles/dmt",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "644da11072551f44624a2411"
+    },
+    "from": "subjectivereport",
+    "to": "https://subjective.report",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "60904a219498577309daf000"
+    },
+    "from": "effects/duration-terminology-explanation",
+    "to": "articles/duration-terminology-explanation",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "60ecc5e1ca10872ffc40686a"
+    },
+    "from": "effects/time-dilation",
+    "to": "effects/time-distortion?s=time-dilation",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "60904a4e9498577309daf2c4"
+    },
+    "from": "effects/approximate-frequency-of-occurrence-scale",
+    "to": "articles/approximate-frequency-of-occurrence-scale",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "60ecc604ca10872ffc40686b"
+    },
+    "from": "effects/time-compression",
+    "to": "effects/time-distortion?s=time-compression",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "60ecc655ca10872ffc40686d"
+    },
+    "from": "effects/atemporality",
+    "to": "effects/time-distortion?s=atemporality",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "628554566974bf0e94fa3885"
+    },
+    "from": "discord-chat",
+    "to": "discord",
+    "__v": 0
+  }
+]

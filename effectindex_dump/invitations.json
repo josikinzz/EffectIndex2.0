@@ -1,0 +1,50 @@
+[
+  {
+    "_id": {
+      "$oid": "639bff3ec8fe6d0440b0b609"
+    },
+    "used": true,
+    "createdBy": {
+      "$oid": "6117fbcdbb4f7a63021143b2"
+    },
+    "created": {
+      "$date": "2022-12-16T05:16:46.205Z"
+    },
+    "__v": 0,
+    "usedBy": {
+      "$oid": "66b6448994c084b220b33ef1"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6344bc3e85282217bfb616d0"
+    },
+    "used": true,
+    "createdBy": {
+      "$oid": "6117fbcdbb4f7a63021143b2"
+    },
+    "created": {
+      "$date": "2022-10-11T00:43:42.629Z"
+    },
+    "__v": 0,
+    "usedBy": {
+      "$oid": "65974c6f96cfbfebf12b5481"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "659882c756aa127d04e9f9c1"
+    },
+    "used": true,
+    "createdBy": {
+      "$oid": "6117fbcdbb4f7a63021143b2"
+    },
+    "created": {
+      "$date": "2024-01-05T22:29:41.631Z"
+    },
+    "__v": 0,
+    "usedBy": {
+      "$oid": "65d2d3eed500e34b2971156a"
+    }
+  }
+]
