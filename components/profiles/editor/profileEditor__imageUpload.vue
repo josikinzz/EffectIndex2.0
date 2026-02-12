@@ -42,6 +42,7 @@
 
 <script>
 export default {
+  emits: ['update:modelValue', 'input'],
   props: {
     username: {
       type: String,
@@ -63,7 +64,9 @@ export default {
     };
   },
   updated () {
-    this.$emit("input", { full: this.full.file, cropped: this.cropped.file });
+    const payload = { full: this.full.file, cropped: this.cropped.file };
+    this.$emit("update:modelValue", payload);
+    this.$emit("input", payload);
   },
   methods: {
     processFullImage(e) {
@@ -96,17 +99,17 @@ export default {
 
       try {
         this.uploadStatus = "Uploading...";
-        let response = await this.$axios.$post(
-          "/api/profiles/upload",
-          formData
-        );
+        const apiFetch = useApiFetch();
+        let response = await apiFetch("/api/profiles/upload", {
+          method: 'POST',
+          body: formData
+        });
         if (response) this.uploadStatus = "Uploaded!";
       } catch (error) {
         this.uploadStatus = "Error!";
-        if ('response' in error) {
-          if ('data' in error.response) {
-            this.uploadStatus = this.uploadStatus + " " + error.response.data.error.message;
-          }
+        const message = error?.data?.error?.message || error?.response?._data?.error?.message;
+        if (message) {
+          this.uploadStatus = this.uploadStatus + " " + message;
         }
       }
     }

@@ -31,7 +31,7 @@
       </div>
     </div>
     <social-media 
-      v-for="(social, index) in value"
+      v-for="(social, index) in currentValue"
       :key="index"
       :index="index"
       :type="social.type"
@@ -50,7 +50,12 @@ export default {
   components: {
     SocialMedia
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
@@ -62,11 +67,18 @@ export default {
       socialMediaType: 'personal'
     };
   },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    }
+  },
   methods: {
     addSocialMedia () {
       const type = this.socialMediaType;
       const value = this.socialMediaValue;
-      this.$emit('input', [...this.value, { type, value }]);
+      const next = [...this.currentValue, { type, value }];
+      this.$emit('update:modelValue', next);
+      this.$emit('input', next);
       this.reset();
     },
     reset () {
@@ -75,24 +87,28 @@ export default {
     },
     moveSocialMediaUp (index) {
       if (index > 0) {
-        const socialMediaCopy = this.value.slice();
+        const socialMediaCopy = this.currentValue.slice();
         const temp = socialMediaCopy[index - 1];
         socialMediaCopy[index - 1] = socialMediaCopy[index];
         socialMediaCopy[index] = temp;
+        this.$emit('update:modelValue', socialMediaCopy);
         this.$emit('input', socialMediaCopy);
       }
     },
     moveSocialMediaDown (index) {
-      if (index < (this.value.length - 1)) {
-        const socialMediaCopy = this.value.slice();
+      if (index < (this.currentValue.length - 1)) {
+        const socialMediaCopy = this.currentValue.slice();
         const temp = socialMediaCopy[index + 1];
         socialMediaCopy[index + 1] = socialMediaCopy[index];
         socialMediaCopy[index] = temp;
+        this.$emit('update:modelValue', socialMediaCopy);
         this.$emit('input', socialMediaCopy);
       }
     },
     removeSocialMedia (index) {
-      this.$emit('input', this.value.filter( (val, i) => i !== index ));
+      const next = this.currentValue.filter( (val, i) => i !== index );
+      this.$emit('update:modelValue', next);
+      this.$emit('input', next);
     },
     handleKeyDown(e) {
       if (e.key === 'Enter') {

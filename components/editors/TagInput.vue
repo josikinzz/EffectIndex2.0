@@ -6,7 +6,7 @@
     >
     <ul class="tagList">
       <li
-        v-for="(tag, index) in value"
+        v-for="(tag, index) in currentValue"
         :key="tag"
         class="tagItem" 
       >
@@ -29,7 +29,12 @@ export default {
   components: {
     Icon
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
@@ -40,14 +45,18 @@ export default {
       tagInputText: ""
     };
   },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    }
+  },
   methods: {
     changeInput(e) {
       if (e.keyCode === 13) {
-        if (this.value.indexOf(e.target.value) === -1) {
-          this.$emit(
-            "input",
-            [e.target.value.trim()].concat(this.value).sort()
-          );
+        if (this.currentValue.indexOf(e.target.value) === -1) {
+          const next = [e.target.value.trim()].concat(this.currentValue).sort();
+          this.$emit("update:modelValue", next);
+          this.$emit("input", next);
         }
         this.tagInputText = "";
       } else if (e.target.value.indexOf(",") > -1) {
@@ -59,18 +68,21 @@ export default {
         let newValue = [];
 
         arr.forEach(tag => {
-          if (this.value.indexOf(tag) === -1) {
+          if (this.currentValue.indexOf(tag) === -1) {
             newValue.push(tag);
           }
         });
 
-        this.$emit("input", newValue.concat(this.value).sort());
+        const next = newValue.concat(this.currentValue).sort();
+        this.$emit("update:modelValue", next);
+        this.$emit("input", next);
         this.tagInputText = "";
       }
     },
     removeTag(index) {
-      let newArr = this.value.slice();
+      let newArr = this.currentValue.slice();
       newArr.splice(index, 1);
+      this.$emit("update:modelValue", newArr);
       this.$emit("input", newArr);
     }
   }

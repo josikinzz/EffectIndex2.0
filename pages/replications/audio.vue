@@ -15,29 +15,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AudioReplication from "@/components/replications/audio/AudioReplication";
 import Icon from '@/components/Icon';
 
-export default {
-  components: {
-    AudioReplication,
-    Icon
-  },
-  async fetch({ store }) {
-    await store.dispatch("replications/get");
-    await store.dispatch("effects/get");
-  },
-  head() {
-    return {
-      title: "Audio Replications"
-    };
-  },
-  computed: {
-    audioReplications() {
-      return this.$store.state.replications.list.filter(
-        (replication) => (replication.type === 'audio'));
-    }
-  }
-};
+useHead({ title: "Audio Replications" });
+
+const { $store } = useNuxtApp();
+await useAsyncData('replications:audio', async () => {
+  await $store.dispatch("replications/get");
+  await $store.dispatch("effects/get");
+  return {};
+});
+
+const audioReplications = computed(() => {
+  return $store.state.replications.list.filter(
+    (replication) => (replication.type === 'audio')
+  );
+});
 </script>

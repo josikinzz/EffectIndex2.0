@@ -4,12 +4,12 @@
       v-show="title"
       class="actionTitle"
     >
-      <nuxt-link 
+      <a
         v-if="page"
-        :to="page"
+        :href="page"
       >
         {{ title }} 
-      </nuxt-link>
+      </a>
       <template v-else>
         {{ title }}
       </template>
@@ -20,9 +20,9 @@
         :key="effect._id"
         class="effectTitle"
       >
-        <nuxt-link :to="`/effects/${effect.url}`">
+        <a :href="`/effects/${effect.url}`">
           {{ effect.name }}
-        </nuxt-link>
+        </a>
         <ul 
           v-if="effect.subarticles && effect.subarticles.length"
           class="subarticleList"
@@ -32,9 +32,9 @@
             :key="index"
             class="subarticleListItem"
           >
-            <nuxt-link :to="`/effects/${effect.url}?s=${subarticle.id}`">
+            <a :href="`/effects/${effect.url}?s=${subarticle.id}`">
               {{ subarticle.title }}
-            </nuxt-link>
+            </a>
           </li>
         </ul>
       </li>

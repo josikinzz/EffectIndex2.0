@@ -18,7 +18,7 @@
       </button>
     </div>
     <div
-      v-for="(person, index) in value"
+      v-for="(person, index) in currentValue"
       :key="index"
       class="person"
     >
@@ -32,10 +32,15 @@
 
 <script>
 export default {
+  emits: ['update:modelValue', 'input'],
   props: {
     people: {
       type: Array,
       default: () => ([])
+    },
+    modelValue: {
+      type: Array,
+      default: undefined
     },
     value: {
       type: Array,
@@ -47,14 +52,24 @@ export default {
       selected: undefined
     };
   },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    }
+  },
   methods: {
     addPerson(e) {
-      this.$emit('input', [this.selected, ...this.value]);
+      const next = [this.selected, ...this.currentValue];
+      this.$emit('update:modelValue', next);
+      this.$emit('input', next);
     },
     removePerson(index) {
-      this.$emit('input', this.value.filter((person, i) => index !== i));
+      const next = this.currentValue.filter((person, i) => index !== i);
+      this.$emit('update:modelValue', next);
+      this.$emit('input', next);
     },
     clear() {
+      this.$emit('update:modelValue', []);
       this.$emit('input', []);
     }
   }

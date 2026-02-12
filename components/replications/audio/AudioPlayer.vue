@@ -64,7 +64,6 @@
 <script>
 import Icon from '@/components/Icon';
 let WaveSurfer = undefined;
-if (process.browser) WaveSurfer = require("wavesurfer.js");
 
 export default {
   components: {
@@ -127,10 +126,19 @@ export default {
     }
   },
   beforeDestroy() {
+    if (!this.wavesurfer) return;
     this.pause();
     this.wavesurfer.unAll();
+    this.wavesurfer.destroy();
   },
-  mounted() {
+  async mounted() {
+    if (!process.client) return;
+
+    if (!WaveSurfer) {
+      const module = await import("wavesurfer.js");
+      WaveSurfer = module.default || module;
+    }
+
     this.wavesurfer = WaveSurfer.create({
       container: this.$refs.waveform,
       waveColor: "#555555",
@@ -148,22 +156,27 @@ export default {
   },
   methods: {
     load() {
+      if (!this.wavesurfer) return;
       this.state = "LOADING";
       this.wavesurfer.load(this.audioInfo.src);
     },
     play() {
+      if (!this.wavesurfer) return;
       this.state = "PLAYING";
       this.length = this.wavesurfer.getDuration();
       this.wavesurfer.play();
     },
     pause() {
+      if (!this.wavesurfer) return;
       this.state = "PAUSED";
       this.wavesurfer.pause();
     },
     audioProcess() {
+      if (!this.wavesurfer) return;
       this.position = this.wavesurfer.getCurrentTime();
     },
     finish() {
+      if (!this.wavesurfer) return;
       this.state = "STOPPED";
       this.wavesurfer.seekTo(0);
     },

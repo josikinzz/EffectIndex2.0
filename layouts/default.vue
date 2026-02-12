@@ -9,7 +9,7 @@
         <user-bar v-if="$auth.loggedIn" />
       </client-only>
       <main class="page">
-        <nuxt />
+        <slot />
       </main>
       <custom-footer />
     </div>
@@ -129,6 +129,7 @@ body {
 }
 
 .mainContainer {
+  position: relative;
   transition: margin-left 0.25s ease-out;
   z-index: 3;
   min-height: 100vh;

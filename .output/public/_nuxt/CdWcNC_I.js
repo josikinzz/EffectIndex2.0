@@ -1,0 +1,1 @@
+async function l({route:t,redirect:r,store:c}){try{c.state.redirects.fetched||await c.dispatch("redirects/get");const e=c.state.redirects.list.find(i=>i.from===t.fullPath.slice(1)||i.from+"/"===t.fullPath.slice(1));e&&t.fullPath!=="/"+e.to&&r("/"+e.to)}catch(e){console.log("Redirect middleware error:"),console.log(e)}}export{l as default};

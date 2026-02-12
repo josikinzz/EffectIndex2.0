@@ -1,6 +1,6 @@
 <template>
-  <nuxt-link 
-    :to="`/reports/${report.slug}`"
+  <a
+    :href="`/reports/${report.slug}`"
     :class="`reportList__item ${report.featured ? 'featured' : ''}`"
     tabindex="0"
   >
@@ -40,7 +40,7 @@
         style="height: 30px; width: 30px; opacity: 0.65;"
       />
     </div>     
-  </nuxt-link>
+  </a>
 </template>
 
 <script>

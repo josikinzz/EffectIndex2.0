@@ -17,73 +17,68 @@
   </div>
 </template>
 
-<script>
+<script setup>
+definePageMeta({ middleware: 'auth' });
+useHead({ title: "Manage Redirects" });
 
 import RedirectListItem from '@/components/redirects/RedirectListItem';
 import RedirectInput from '@/components/redirects/RedirectInput';
 
-export default {
-  components: {
-    RedirectListItem,
-    RedirectInput
-  },
-  middleware: ['auth'],
-  data() {
-    return {
-      redirects: undefined
-    };
-  },
-  async fetch() {
-    try {
-      const { redirects } = await this.$axios.$get('/api/redirects');
-      this.redirects = redirects;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  head() {
-    return {
-      title: "Manage Redirects"
-    };
-  },
-  methods: {
-    async submitRedirect(redirect) {
-      try {
-        await this.$axios.$post('/api/redirects', { redirect });
-        this.$refs.redirectInput.clearFields();
-        this.$toasted.show('The redirect was successfully added.', { duration: 2000, type: 'success' });
-        this.$store.dispatch('redirects/get');
-        this.$fetch();
-      } catch (error) {
-        this.$toasted.show('There was an error adding the redirect.', { duration: 2000, type: 'success' });
-        console.log(error);
-      }
-    },
+const apiFetch = useApiFetch();
+const { $store, $toast } = useNuxtApp();
+const redirectInput = ref(null);
 
-    async deleteRedirect(id) {
-      try {
-        await this.$axios.$delete(`/api/redirects/${id}`);
-        this.$toasted.show('The redirect was successfully deleted.', { duration: 2000, type: 'success' });
-        this.$store.dispatch('redirects/get');
-        this.$fetch();
-      } catch (error) {
-        this.$toasted.show('There was an error deleting the redirect.', { duration: 2000, type: 'success' });
-        console.log(error);
-      }
-    },
+const { data, refresh } = await useAsyncData('admin:redirects', async () => {
+  try {
+    const { redirects } = await apiFetch('/api/redirects');
+    return { redirects };
+  } catch (error) {
+    console.log(error);
+    return { redirects: [] };
+  }
+});
 
-    async updateRedirect(redirect) {
-      const { _id } = redirect;
-      try {
-        await this.$axios.$put(`/api/redirects/${_id}`, { redirect });
-        this.$toasted.show('The redirect was successfully updated.', { duration: 2000, type: 'success' });
-        this.$store.dispatch('redirects/get');
-        this.$fetch();
-      } catch (error) {
-        this.$toasted.show('There was an error updating the redirect.', { duration: 2000, type: 'success' });
-        console.log(error);
-      }
-    }
+const redirects = computed(() => data.value?.redirects ?? []);
+
+const loadRedirects = async () => {
+  await refresh();
+};
+
+const submitRedirect = async (redirect) => {
+  try {
+    await apiFetch('/api/redirects', { method: 'POST', body: { redirect } });
+    redirectInput.value?.clearFields?.();
+    $toast?.success?.('The redirect was successfully added.', { timeout: 2000 });
+    await $store.dispatch('redirects/get');
+    await loadRedirects();
+  } catch (error) {
+    $toast?.error?.('There was an error adding the redirect.', { timeout: 2000 });
+    console.log(error);
+  }
+};
+
+const deleteRedirect = async (id) => {
+  try {
+    await apiFetch(`/api/redirects/${id}`, { method: 'DELETE' });
+    $toast?.success?.('The redirect was successfully deleted.', { timeout: 2000 });
+    await $store.dispatch('redirects/get');
+    await loadRedirects();
+  } catch (error) {
+    $toast?.error?.('There was an error deleting the redirect.', { timeout: 2000 });
+    console.log(error);
+  }
+};
+
+const updateRedirect = async (redirect) => {
+  const { _id } = redirect;
+  try {
+    await apiFetch(`/api/redirects/${_id}`, { method: 'PUT', body: { redirect } });
+    $toast?.success?.('The redirect was successfully updated.', { timeout: 2000 });
+    await $store.dispatch('redirects/get');
+    await loadRedirects();
+  } catch (error) {
+    $toast?.error?.('There was an error updating the redirect.', { timeout: 2000 });
+    console.log(error);
   }
 };
 </script>

@@ -144,7 +144,7 @@ export default {
   overflow: hidden;
   left: 2px;
   z-index: 7;
-  top: 70px;
+  top: 100%;
   list-style: none;
   padding: 1em 0 1em 0;
   max-height: 0;

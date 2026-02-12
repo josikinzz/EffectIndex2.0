@@ -49,35 +49,20 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Icon from '@/components/Icon';
 
-export default {
-  components: {
-    Icon
-  },
-  async fetch({ store }) {
-    await store.dispatch("profiles/get");
-  },
-  computed: {
-    profiles() {
-      return this.$store.state.profiles.list;
-    }
-  },
-  methods: {
-    async deleteProfile(id) {
-      await this.$store.dispatch("profiles/delete", id);
+definePageMeta({ middleware: 'auth' });
 
-        this.$toasted.show(
-          'The profile was successfully deleted. You\'re a horrible person.',
-          {
-            duration: 2000,
-            type: 'success'
-          }
-        );
+const { $store, $toast } = useNuxtApp();
 
-    }
-  }
+await useAsyncData('admin:profiles', () => $store.dispatch("profiles/get"));
+
+const profiles = computed(() => $store.state.profiles.list);
+
+const deleteProfile = async (id) => {
+  await $store.dispatch("profiles/delete", id);
+  $toast?.success?.('The profile was successfully deleted. You\'re a horrible person.', { timeout: 2000 });
 };
 </script>
 

@@ -5,32 +5,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import PeopleProfileList from "@/components/people/PeopleProfileList";
 
-export default {
-  components: {
-    PeopleProfileList
-  },
-  data() {
-    return {
-      people: []
-    };
-  },
-  async fetch() {
-    try {
-      const {people} = await this.$axios.$get('/api/persons/featured');
-      this.people = people;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  head() {
-    return {
-      title: "People"
-    };
-  },
-};
+const apiFetch = useApiFetch();
+const { data } = await useAsyncData('people:featured', async () => {
+  try {
+    return await apiFetch('/api/persons/featured');
+  } catch (error) {
+    console.log(error);
+    return { people: [] };
+  }
+});
+
+const people = computed(() => data.value?.people ?? []);
+
+useHead({ title: "People" });
 </script>
 
 <style scoped>

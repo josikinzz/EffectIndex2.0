@@ -1,9 +1,9 @@
 <template>
   <div class="featuredArticle">
     <div class="articleTitle">
-      <nuxt-link :to="`/articles/${article.slug}`">
+      <a :href="`/articles/${article.slug}`">
         {{ article.title }}
-      </nuxt-link>
+      </a>
     </div>
     <div class="articleAuthors">
       by {{ authors }}

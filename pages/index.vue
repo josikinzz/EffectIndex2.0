@@ -1,6 +1,12 @@
 <template>
   <div class="pageContent">
     <Description />
+    <div
+      v-if="prefetchMessage"
+      class="dataWarning"
+    >
+      {{ prefetchMessage }}
+    </div>
     <FrontpageArticle />
     <Columns>
       <Column>
@@ -25,7 +31,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Description from '@/components/home/Description';
 import FeaturedEffects from '@/components/home/FeaturedEffects';
 import FeaturedReports from '@/components/home/FeaturedReports';
@@ -37,37 +43,49 @@ import SubstanceSummaries from '@/components/home/SubstanceSummaries';
 import Column from '@/components/home/Column';
 import Columns from '@/components/home/Columns';
 
-export default {
-  name: 'Home',
-  components: {
-    FrontpageArticle,
-    Description,
-    Column,
-    Columns,
-    SubstanceSummaries,
-    FeaturedEffects,
-    FeaturedReports,
-    FeaturedReplications,
-    FeaturedArticles,
-    FeaturedSponsor
-  },
-  scrollToTop: true,
+definePageMeta({ scrollToTop: true });
 
-  async fetch({ store }) {
-    await Promise.all([
-      store.dispatch("effects/get"),
-      store.dispatch("replications/featured"),
-      store.dispatch("reports/get"),
-      store.dispatch("articles/get")
-    ]);
-  },
+const { $store } = useNuxtApp();
+const formatFailure = (reason) => {
+  const statusCode = reason?.statusCode || reason?.response?.status || reason?.data?.statusCode;
+  const errorName = reason?.data?.error?.name || reason?.name || 'Error';
+  const message = reason?.data?.error?.message || reason?.statusMessage || reason?.message || 'Unknown error';
 
-  computed: {
-    imageReplications() {
-      return this.$store.state.replications.list.filter((replication) => replication.type === 'image');
-    }
-  }
+  return `${statusCode ? `${statusCode} ` : ''}${errorName}: ${message}`;
 };
+
+const { data: prefetchData } = await useAsyncData('home:prefetch', async () => {
+  const prefetchTasks = [
+    { label: 'effects', promise: $store.dispatch("effects/get") },
+    { label: 'replications', promise: $store.dispatch("replications/featured") },
+    { label: 'reports', promise: $store.dispatch("reports/get") },
+    { label: 'articles', promise: $store.dispatch("articles/get") }
+  ];
+
+  const results = await Promise.allSettled(prefetchTasks.map(task => task.promise));
+  const failed = results
+    .map((result, index) => ({ result, label: prefetchTasks[index].label }))
+    .filter((entry) => entry.result.status === 'rejected');
+
+  if (failed.length === 0) {
+    return { message: '' };
+  }
+
+  const failureDetails = failed
+    .map((entry) => `${entry.label} (${formatFailure(entry.result.reason)})`)
+    .join('; ');
+
+  return {
+    message: `Some homepage content is unavailable. ${failureDetails}. ` +
+      `Check /api/health for database status when running locally.`
+  };
+});
+
+const prefetchMessage = computed(() => prefetchData.value?.message || '');
+
+const imageReplications = computed(() => {
+  return $store.state.replications.list.filter((replication) => replication.type === 'image');
+});
 </script>
 
 <style scoped>
@@ -85,6 +103,14 @@ export default {
 .columns {
   display: flex;
   flex-direction: row;
+}
+
+.dataWarning {
+  border: 1px solid #e0c289;
+  background: #fff7e5;
+  color: #5c471a;
+  margin: 0 0 1em;
+  padding: 0.75em 1em;
 }
 
 @media(max-width: 800px) {

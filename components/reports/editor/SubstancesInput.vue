@@ -23,7 +23,7 @@
 
     <div class="reportEditor__tableContainer">
       <table
-        v-show="value.length"
+        v-show="currentValue.length"
         class="reportEditor__substancesTable"
       >
         <thead>
@@ -36,7 +36,7 @@
         </thead>
         <tbody>
           <tr 
-            v-for="(substanceItem, index) in value"
+            v-for="(substanceItem, index) in currentValue"
             :key="index"
           >
             <td> {{ substanceItem.name }} </td>
@@ -98,10 +98,20 @@ export default {
   components: {
     Icon
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
+    }
+  },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
     }
   },
   data() {
@@ -112,23 +122,25 @@ export default {
   methods: {
     clear() { this.substance = { name: "", dose: "", roa: "" }; },
     addItem() {
-      let list = [ ...this.value ];
+      let list = [ ...this.currentValue ];
 
       list.push(this.substance);
 
+      this.$emit('update:modelValue', list);
       this.$emit('input', list);
 
       this.clear();
     },
     removeItem(index) {
-      let list = [ ...this.value ];
+      let list = [ ...this.currentValue ];
 
       list.splice(index, 1);
 
+      this.$emit('update:modelValue', list);
       this.$emit('input', list);
     },
     moveItemUp(index) {
-      let list = [ ...this.value ];
+      let list = [ ...this.currentValue ];
 
       if (index > 0) {
         let swap = list[index];
@@ -136,11 +148,12 @@ export default {
         list[index - 1] = swap;
       }
 
+      this.$emit('update:modelValue', list);
       this.$emit('input', list);
     },
 
     moveItemDown(index) {
-      let list = [ ...this.value ];
+      let list = [ ...this.currentValue ];
 
       if (index < (list.length - 1)) {
         let swap = list[index];
@@ -148,6 +161,7 @@ export default {
         list[index + 1] = swap;
       }
 
+      this.$emit('update:modelValue', list);
       this.$emit('input', list);
     }
   }

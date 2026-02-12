@@ -17,7 +17,8 @@ export default {
 </script>
 
 <style scoped>
-.markdown >>> p:not(:last-child), .markdown >>> ul:not(:last-child) {
+.markdown :deep(p:not(:last-child)),
+.markdown :deep(ul:not(:last-child)) {
   margin-bottom: 1em;
 }
 </style>

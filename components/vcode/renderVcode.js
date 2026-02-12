@@ -9,7 +9,7 @@ import List from "./components/List";
 import Columns from "./components/Columns";
 import Column from "./components/Column";
 import Panel from "./components/Panel";
-import Comparison from "./components/Comparison/";
+import Comparison from "./components/Comparison/Comparison.vue";
 
 import Category from "@/components/Category";
 import ExtLink from "@/components/ExtLink";
@@ -33,7 +33,18 @@ function renderVcode(createElement, data, body) {
     const {name, properties, children} = node;
     switch (name) {
       case "comparison":
-        return createElement(Comparison, {props: {...properties}}, children);
+        const comparisonChildren = Array.isArray(children) ? children : [];
+        const items = comparisonChildren.filter(child => child && child.name === "item");
+        const description = comparisonChildren.find(child => child && child.name === "description");
+        const images = [];
+
+        for (const item of items) {
+          const itemChildren = Array.isArray(item.children) ? item.children : [];
+          const image = itemChildren.find(child => child && child.name === "image");
+          if (image) images.push(image);
+        }
+
+        return createElement(Comparison, {props: {...properties, items, images, ...(description ? {description} : {})}});
       case "headered-textbox":
         return createElement(HeaderedTextbox, {props: {...properties}}, createNodes(children, data));
       case "i":
@@ -108,10 +119,11 @@ function renderVcode(createElement, data, body) {
           {props: {...properties}},
         );
       case "int-link":
-        if (properties && 'to' in properties) {
+        if (properties && ('to' in properties || 'href' in properties)) {
+          const to = properties.to || properties.href;
           return createElement(
-            "nuxt-link",
-            {props: {...properties}},
+            "a",
+            {attrs: {href: to}},
             createNodes(children, data)
           );
         } else return createElement(
@@ -120,8 +132,8 @@ function renderVcode(createElement, data, body) {
           createNodes(children, data)
         );
       case "ext-link":
-        if (properties && 'to' in properties) {
-          const {to} = properties;
+        if (properties && ('to' in properties || 'href' in properties)) {
+          const to = properties.to || properties.href;
           return createElement(ExtLink, {attrs: {href: to}}, createNodes(children, data));
         } else {
           return createElement('span', {attrs: {style: 'color: red;'}}, createNodes(children, data));
@@ -146,9 +158,12 @@ function renderVcode(createElement, data, body) {
           createNodes(children, data)
         );
       case "markdown":
+        const markdownText = (properties && typeof properties.text === 'string')
+          ? properties.text
+          : (Array.isArray(children) ? children.filter((child) => typeof child === 'string').join('') : '');
         return createElement(
           Markdown,
-          {props: {...properties}},
+          {props: {...properties, text: markdownText}},
         );
       case "audio":
         return createElement(

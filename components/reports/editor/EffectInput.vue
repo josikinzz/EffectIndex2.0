@@ -17,7 +17,12 @@
 
 <script>
 export default {
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
@@ -26,23 +31,37 @@ export default {
   data() {
     return {
       effects: [],
-      selectedEffects: this.value
+      selectedEffects: this.modelValue !== undefined ? this.modelValue : this.value
     };
   },
-  async fetch () {
-    try {
-      const results = await this.$axios.get('/api/effects');
-      const { effects } = results.data;
-      this.effects = effects;
-    } catch (error) {
-      console.log(error);
+  watch: {
+    modelValue(value) {
+      this.selectedEffects = value;
+    },
+    value(value) {
+      if (this.modelValue === undefined) {
+        this.selectedEffects = value;
+      }
     }
   },
+  mounted() {
+    this.loadEffects();
+  },
   methods: {
+    async loadEffects() {
+      try {
+        const apiFetch = useApiFetch();
+        const { effects } = await apiFetch('/api/effects');
+        this.effects = effects;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     toggleSelection(id) {
       this.selectedEffects = this.selectedEffects.includes(id) ?
       this.selectedEffects.filter(effectId => effectId !== id) :
       [...this.selectedEffects, id];
+      this.$emit('update:modelValue', this.selectedEffects);
       this.$emit('input', this.selectedEffects);
     }
   }

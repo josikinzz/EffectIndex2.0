@@ -81,30 +81,33 @@ export default {
   .panel-content {
     margin: 0;
   }
-  .panel-content >>> ul {
+  .panel-content :deep(ul) {
     margin: 0;
     padding-left: 0;
   }
-  .panel-content >>> h4 {
+  .panel-content :deep(h4) {
     font-size: 20px;
     margin: 0;
     padding: 0.5em 0 0 0.8em;
     text-transform: uppercase;
   }
-  .panel-content >>> h4:not(:first-child) {
+  .panel-content :deep(h4:not(:first-child)) {
     border-top: 1px solid #ddd;
   }
-  .panel-content >>> ul ul {
+  .panel-content :deep(ul ul) {
     margin: 0;
   }
-  .panel-content >>> ul li {
+  .panel-content :deep(ul li) {
     margin: 0.5em 0 0.5em 2em;
     font-weight: 300;
   }
-  .panel-content >>> ul li::marker {
+  .panel-content :deep(ul li::marker) {
     color: #ddd;
   }
-  .panel-content >>> h1, .panel-content >>> h2, .panel-content >>> h3, .panel-content >>> h4 {
+  .panel-content :deep(h1),
+  .panel-content :deep(h2),
+  .panel-content :deep(h3),
+  .panel-content :deep(h4) {
     margin: 0.5em 0;
   }
 </style>

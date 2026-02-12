@@ -10,7 +10,7 @@
 
     <div class="inputContainer">
       <input
-        ref="searchInput"
+        ref="searchInputRef"
         :value="searchInput"
         type="text"
         class="searchInput"
@@ -75,76 +75,63 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import EffectResult from "@/components/search/EffectResult";
 import ReportResult from "@/components/search/ReportResult";
 import ArticleListItem from "@/components/articles/ArticleListItem";
 import Icon from '@/components/Icon';
-import { debounce } from "lodash";
+import lodash from 'lodash';
 
-export default {
-  components: {
-    EffectResult,
-    ReportResult,
-    ArticleListItem,
-    Icon
-  },
-  scrollToTop: true,
-  async fetch({ store, route }) {
+const { debounce } = lodash;
+
+definePageMeta({ scrollToTop: true });
+useHead({ title: "Search" });
+
+const route = useRoute();
+const { $store } = useNuxtApp();
+const searchInputRef = ref(null);
+
+await useAsyncData(
+  'search:prefetch',
+  async () => {
     if (route.query.q) {
-      await store.dispatch('search/search', route.query.q);
-      store.commit('search/change_input', route.query.q);
+      await $store.dispatch('search/search', route.query.q);
+      $store.commit('search/change_input', route.query.q);
+    } else {
+      $store.commit('search/clear_input');
     }
+    return {};
   },
-  head() {
-    return {
-      title: "Search"
-    };
-  },
-  computed: {
-    results() {
-      return this.effectResults || this.reportResults || this.articleResults;
-    },
+  { watch: [() => route.query.q] }
+);
 
-    effectResults() {
-      return this.$store.state.search.results.effects;
-    },
+const effectResults = computed(() => $store.state.search.results.effects);
+const reportResults = computed(() => $store.state.search.results.reports);
+const articleResults = computed(() => $store.state.search.results.articles);
+const searchInput = computed(() => $store.state.search.input);
+const results = computed(() => effectResults.value || reportResults.value || articleResults.value);
 
-    reportResults() {
-      return this.$store.state.search.results.reports;
-    },
+const performSearch = debounce(() => {
+  $store.dispatch('search/search', searchInput.value);
+}, 400, { trailing: true });
 
-    articleResults() {
-      return this.$store.state.search.results.articles;
-    },
-
-    searchInput() {
-      return this.$store.state.search.input;
-    }
-  },
-  watchQuery: ['q'],
-  mounted() {
-    this.$refs.searchInput.focus();
-  },
-  destroyed() {
-    this.$store.commit('search/clear_input');
-  },
-  methods: {
-    changeSearchInput(e) {
-      this.$store.commit('search/change_input', e.target.value);
-      this.performSearch();
-    },
-
-    performSearch: debounce(function() {
-      this.$store.dispatch('search/search', this.searchInput);
-    }, 400, {trailing: true}),
-
-    clear() {
-      this.$store.commit('search/clear_input');
-      this.$refs.searchInput.focus();
-    }
-  }
+const changeSearchInput = (e) => {
+  $store.commit('search/change_input', e.target.value);
+  performSearch();
 };
+
+const clear = () => {
+  $store.commit('search/clear_input');
+  searchInputRef.value?.focus();
+};
+
+onMounted(() => {
+  searchInputRef.value?.focus();
+});
+
+onUnmounted(() => {
+  $store.commit('search/clear_input');
+});
 </script>
 
 <style scoped>

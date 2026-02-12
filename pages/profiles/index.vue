@@ -29,28 +29,16 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Icon from '@/components/Icon';
 
-export default {
-  components: {
-    Icon
-  },
-  scrollToTop: true,
-  async asyncData({ store }) {
-    await store.dispatch("profiles/get");
-  },
-  head() {
-    return {
-      title: "Contributors"
-    };
-  },
-  computed: {
-    profiles() {
-      return this.$store.state.profiles.list;
-    }
-  }
-};
+definePageMeta({ scrollToTop: true });
+useHead({ title: "Contributors" });
+
+const { $store } = useNuxtApp();
+await useAsyncData('profiles:list', () => $store.dispatch("profiles/get"));
+
+const profiles = computed(() => $store.state.profiles.list);
 </script>
 
 <style scoped>

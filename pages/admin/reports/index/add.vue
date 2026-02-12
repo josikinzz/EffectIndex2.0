@@ -8,13 +8,14 @@
 </template>
 
 <script>
+definePageMeta({ middleware: 'auth' })
+
   import ReportEditor from "@/components/reports/editor/ReportEditor.vue";
 
   export default {
     components: {
       ReportEditor
     },
-    middleware: ["auth"],
     methods: {
       async submitReport(report) {
         try {

@@ -1,5 +1,5 @@
 <template>
-  <Panel
+  <FrontpagePanel
     icon="flask.svg"
     title="Substance Summaries"
     description="Hallucinogenic substance classes, broken down and described"
@@ -10,42 +10,42 @@
       <ul class="summaryList">
         <li class="summaryItem">
           <span style="color: #333;"> Psychedelics: </span>
-          <nuxt-link :to="'/summaries/psychedelics/visual'">
+          <a href="/summaries/psychedelics/visual">
             Visual,
-          </nuxt-link>
-          <nuxt-link :to="'/summaries/psychedelics/cognitive'">
+          </a>
+          <a href="/summaries/psychedelics/cognitive">
             Cognitive,
-          </nuxt-link>
-          <nuxt-link :to="'/summaries/psychedelics/miscellaneous'">
+          </a>
+          <a href="/summaries/psychedelics/miscellaneous">
             Miscellaneous
-          </nuxt-link>
+          </a>
         </li>
         <li class="summaryItem">
-          <nuxt-link :to="'/summaries/dissociatives'">
+          <a href="/summaries/dissociatives">
             Dissociatives
-          </nuxt-link>
+          </a>
         </li>
         <li class="summaryItem">
-          <nuxt-link :to="'/summaries/deliriants'">
+          <a href="/summaries/deliriants">
             Deliriants
-          </nuxt-link>
+          </a>
         </li>
       </ul>
     </template>
     <template v-slot:stub>
-      For more, see the <nuxt-link to="/articles/">
+      For more, see the <a href="/articles/">
         articles section.
-      </nuxt-link>
+      </a>
     </template>
-  </Panel>
+  </FrontpagePanel>
 </template>
 
 <script>
-import Panel from '@/components/home/Panel';
+import FrontpagePanel from '@/components/home/Panel';
 
 export default {
   components: {
-    Panel
+    FrontpagePanel
   }
 };
 </script>

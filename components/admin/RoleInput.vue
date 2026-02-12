@@ -2,11 +2,11 @@
   <div class="role-input">
     <h3> Roles: </h3>
     <ul
-      v-if="value"
+      v-if="currentValue"
       class="user-role-list"
     >
       <li
-        v-for="(role, index) in value"
+        v-for="(role, index) in currentValue"
         :key="index"
         class="role-list-item"
       >
@@ -38,7 +38,12 @@ export default {
   components: {
     Icon
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
@@ -51,22 +56,31 @@ export default {
     };
   },
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
     filteredRoles() {
-      return this.availableRoles.filter(role => !this.value.includes(role));
+      return this.availableRoles.filter(role => !this.currentValue.includes(role));
     }
   },
   methods: {
     addRole() {
       if (this.selectedRole) {
-        this.$emit('input', [...this.value, this.selectedRole]);
+        const next = [...this.currentValue, this.selectedRole];
+        this.$emit('update:modelValue', next);
+        this.$emit('input', next);
       }
     },
     removeRole(index) {
-      this.$emit('input', this.value.filter((role, i) => index !== i));
+      const next = this.currentValue.filter((role, i) => index !== i);
+      this.$emit('update:modelValue', next);
+      this.$emit('input', next);
     },
     giveRole(role) {
-      if (!this.value.includes(role)) {
-        this.$emit('input', [...this.value, role]);
+      if (!this.currentValue.includes(role)) {
+        const next = [...this.currentValue, role];
+        this.$emit('update:modelValue', next);
+        this.$emit('input', next);
       }
     }
   }

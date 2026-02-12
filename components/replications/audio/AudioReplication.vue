@@ -10,9 +10,7 @@
       </span>
     </div>
     <!-- eslint-disable-next-line -->
-    <div v-html="$md.render(description)">
-      {{ description }}
-    </div>
+    <div v-html="$md.render(description)" />
     <audio-player 
       :src="`/audio/${replication.resource}`"
       :title="replication.title"
@@ -60,7 +58,7 @@ export default {
         (effect) => replication.associated_effects.includes(effect._id));
     },
     description() {
-      return (typeof (this.replication.description === 'String') ? this.replication.description : "" );
+      return (typeof this.replication.description === 'string') ? this.replication.description : "";
     }
   }
 };

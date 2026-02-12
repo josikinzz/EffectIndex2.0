@@ -47,26 +47,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import fecha from 'fecha';
 import Icon from '@/components/Icon';
 
-export default {
-    components: {
-      Icon
-    },
-    scrollToTop: true,
-    async fetch ( { store } ) { await store.dispatch('blog/getPosts'); },
-    computed: {
-      blogPosts() {
-        return this.$store.state.blog.posts;
-      }
-    },
-    methods: {
-      async deletePost( id ) { this.$store.dispatch('blog/deletePost', id); },
-      formatDate: (date) => fecha.format(new Date(date), 'MMMM D, YYYY hh:mm:ss')
-    },
+definePageMeta({ middleware: 'auth', scrollToTop: true });
+
+const { $store } = useNuxtApp();
+await useAsyncData('admin:blog:posts', () => $store.dispatch('blog/getPosts'));
+
+const blogPosts = computed(() => $store.state.blog.posts);
+
+const deletePost = async (id) => {
+  await $store.dispatch('blog/deletePost', id);
 };
+
+const formatDate = (date) => fecha.format(new Date(date), 'MMMM D, YYYY hh:mm:ss');
 </script>
 
 <style scoped>

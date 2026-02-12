@@ -11,11 +11,9 @@
       :active-tab="activeTab"
       @selectTab="selectTab"
     >
-      <tab
-        slot="All"
-        style="padding-top: 1em;"
-      >
-        <column>
+      <template #All>
+        <tab style="padding-top: 1em;">
+          <column>
           <category
             icon="eye.svg"
             title="Visual Effects"
@@ -161,11 +159,13 @@
               title="Neurological"
             />
           </category>
-        </column>
-      </tab>
+          </column>
+        </tab>
+      </template>
 
-      <tab slot="Sensory">
-        <blob>
+      <template #Sensory>
+        <tab>
+          <blob>
           <p>
             <b> Sensory effects </b> are subjective effects that directly alter a person's senses. These can include any combination of sight, sound, touch, taste, and smell.
           </p>
@@ -247,11 +247,13 @@
               :effects="filterEffectsByTag('multisensory')"
             />
           </category>
-        </column>
-      </tab>
+          </column>
+        </tab>
+      </template>
 
-      <tab slot="Cognitive">
-        <blob>
+      <template #Cognitive>
+        <tab>
+          <blob>
           <p>
             <b> Cognitive effects </b> are subjective effects that directly alter or introduce new content to an element of a person's cognition.
           </p>
@@ -307,11 +309,13 @@
               :effects="filterEffectsByTag('cognitive', 'transpersonal state')"
             />
           </category>
-        </column>
-      </tab>
+          </column>
+        </tab>
+      </template>
 
-      <tab slot="Physical">
-        <blob>
+      <template #Physical>
+        <tab>
+          <blob>
           <p>
             <b> Physical effects </b> are subjective effects that directly affect part of a person's physical body.
           </p>
@@ -371,13 +375,14 @@
           >
             <actions :effects="filterEffectsByTag('physical', 'cardiovascular')" />
           </category>
-        </column>
-      </tab>
+          </column>
+        </tab>
+      </template>
     </tabs>
   </div>
 </template>
 
-<script>
+<script setup>
 import Tabs from "@/components/effects/index/Tabs";
 import Tab from "@/components/effects/index/Tab";
 import Category from "@/components/effects/index/Category";
@@ -387,45 +392,30 @@ import Description from "@/components/effects/index/Description";
 import Blob from "@/components/effects/index/Blob";
 import Icon from "@/components/Icon";
 
-export default {
-  components: {
-    Tabs,
-    Tab,
-    Category,
-    Actions,
-    Column,
-    Description,
-    Blob,
-    Icon
-  },
-  data() {
-    return {
-      activeTab: this.$route.query.type
-    };
-  },
-  async fetch ({ store }) {
-    await store.dispatch("effects/get");
-  },
-  head() {
-    return {
-      title: "Subjective Effect Index"
-    };
-  },
-  computed: {
-    effects() {
-      return this.$store.state.effects.list;
-    },
-  },
-  watchQuery: ['type'],
-  methods: {
-    filterEffectsByTag(...tags) {
-      return this.effects.filter(effect =>
-        tags.every(tag => effect.tags.indexOf(tag) > -1)
-      );
-    },
-    selectTab(name) {
-      this.activeTab = name;
-    }
-  },
+useHead({ title: "Subjective Effect Index" });
+
+const route = useRoute();
+const { $store } = useNuxtApp();
+
+const activeTab = ref(route.query.type);
+watch(() => route.query.type, (type) => {
+  activeTab.value = type;
+});
+
+await useAsyncData('effects:index', async () => {
+  await $store.dispatch("effects/get");
+  return true;
+});
+
+const effects = computed(() => $store.state.effects.list);
+
+const filterEffectsByTag = (...tags) => {
+  return effects.value.filter(effect =>
+    tags.every(tag => effect.tags.indexOf(tag) > -1)
+  );
+};
+
+const selectTab = (name) => {
+  activeTab.value = name;
 };
 </script>

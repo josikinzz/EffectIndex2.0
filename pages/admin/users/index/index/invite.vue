@@ -43,45 +43,40 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      code: undefined
-    };
-  },
-  computed: {
-    url() {
-      if (this.code && !process.server) {
-        const { port, protocol, hostname } = window.location;
-        return `${protocol}//${hostname}${port ? ':' + port : ''}/user/register/${this.code}`;
-      } else {
-        return undefined;
-      }
-    }
-  },
-  methods: {
-    async generateInvitation() {
-      try {
-        const { code } = await this.$axios.$post('/api/invitations/generate');
-        this.$toasted.show('Invitation successfully generated.', {
-          type: 'success',
-          duration: 2000
-        });
-        this.code = code;
-      } catch (error) {
-        this.$toasted.show('Error generating invitation.', { type: 'error', duration: 2000 });
-        console.log(error);
-      }
-    },
-    async copy() {
-      this.$toasted.show('Registration URL copied to clipboard', { type: 'success', duration: 2000 });
-      navigator.clipboard.writeText(this.url);
-    },
-    clear() {
-      this.code = undefined;
-    }
+<script setup>
+definePageMeta({ middleware: 'auth' });
+
+const apiFetch = useApiFetch();
+const { $toast } = useNuxtApp();
+
+const code = ref(undefined);
+
+const url = computed(() => {
+  if (code.value && !process.server) {
+    const { port, protocol, hostname } = window.location;
+    return `${protocol}//${hostname}${port ? ':' + port : ''}/user/register/${code.value}`;
   }
+  return undefined;
+});
+
+const generateInvitation = async () => {
+  try {
+    const { code: generated } = await apiFetch('/api/invitations/generate', { method: 'POST' });
+    $toast?.success?.('Invitation successfully generated.', { timeout: 2000 });
+    code.value = generated;
+  } catch (error) {
+    $toast?.error?.('Error generating invitation.', { timeout: 2000 });
+    console.log(error);
+  }
+};
+
+const copy = async () => {
+  $toast?.success?.('Registration URL copied to clipboard', { timeout: 2000 });
+  await navigator.clipboard.writeText(url.value);
+};
+
+const clear = () => {
+  code.value = undefined;
 };
 </script>
 

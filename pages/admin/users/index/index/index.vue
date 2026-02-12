@@ -50,66 +50,42 @@
   </table>
 </template>
 
-<script>
-  import RoleList from '@/components/admin/RoleList';
-  import Icon from '@/components/Icon';
+<script setup>
+definePageMeta({ middleware: 'auth' });
+useHead({ title: "Modify Users" });
 
-  export default {
-    components: {
-      RoleList,
-      Icon
-    },
-    middleware: ['auth'],
-    data() {
-      return {
-        users: []
-      };
-    },
-    async fetch() {
-      const { users } = await this.$axios.$get('/api/users');
-      this.users = users;
-    },
-    head() {
-      return {
-        title: "Modify Users"
-      };
-    },
-    methods: {
-      async deleteUser(_id) {
-        try {
-          this.$toasted.show('Really delete?', {
-            action: [{
-                text: 'Yes, delete!',
-                onClick: async (e, toastObject) => {
-                  try {
-                    await this.$axios.$delete(`/api/users/${_id}`);
-                    toastObject.goAway(0);
-                    this.$toasted.show('The user was successfully purged from existence.', { type: 'success', duration: 2000 });
-                    this.$fetch();
-                  } catch (error) {
-                    if (error.response) {
-                      this.$toasted.show(error.response.data.message,
-                      {
-                        duration: 2000,
-                        type: 'error'
-                      });
-                    } else {
-                      console.log(error);
-                    }
-                  }
-                }
-              },
-              {
-                text: 'No, keep!',
-                onClick: (e, toastObject) => toastObject.goAway()
-              }]
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      }
+import RoleList from '@/components/admin/RoleList';
+import Icon from '@/components/Icon';
+
+const apiFetch = useApiFetch();
+const { $toast } = useNuxtApp();
+
+const { data, refresh } = await useAsyncData('admin:users', async () => {
+  const { users } = await apiFetch('/api/users');
+  return { users };
+});
+
+const users = computed(() => data.value?.users ?? []);
+
+const loadUsers = async () => {
+  await refresh();
+};
+
+const deleteUser = async (_id) => {
+  if (!confirm('Really delete?')) return;
+  try {
+    await apiFetch(`/api/users/${_id}`, { method: 'DELETE' });
+    $toast?.success?.('The user was successfully purged from existence.', { timeout: 2000 });
+    await loadUsers();
+  } catch (error) {
+    const message = error?.data?.message || error?.response?._data?.message;
+    if ($toast?.error) {
+      $toast.error(message || 'There was an error deleting the user.', { timeout: 2000 });
+    } else {
+      console.log(error);
     }
-  };
+  }
+};
 </script>
 
 <style scoped>

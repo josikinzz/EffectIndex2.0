@@ -1,0 +1,8 @@
+const AudioPlayer_vue_vue_type_style_index_0_lang = ".audioPlayer__icon{height:1em;opacity:.6;width:1em}.spinner{color:#000}.audioPlayer{background-color:#f5f5f5;border:1px solid #ddd;display:flex;flex-direction:row;height:50px;margin-bottom:2.5em;margin-top:1em;position:relative;-webkit-user-select:none;-moz-user-select:none;user-select:none}.audioPlayer__titleBar{display:flex;flex-direction:column;flex-grow:1;height:50px;justify-content:center;margin:0 1em}@media(max-width:500px){.audioPlayer__titleBar{display:none}}.audioPlayer__title{color:#3d9991;font-size:14px}.audioPlayer__artist{color:#aaa;font-size:13px;font-style:italic}.audioPlayer__playButton{border-right:1px solid #ddd;font-size:20px;height:50px;width:50px}.audioPlayer__playButton a{align-items:center;color:#777;cursor:pointer;display:flex;height:50px;justify-content:center;transition:background-color .15s ease;width:50px}.audioPlayer__playButton a:hover{background-color:#d6d6d6}.audioPlayer__positionDownload{display:flex;flex-direction:column;font-size:12px;font-style:italic;justify-content:center;margin:0 1em;text-align:right;width:75px}.audioPlayer__waveform{flex-grow:1;height:50px}";
+
+const AudioPlayerStyles_BD_Ry6xi = [
+  AudioPlayer_vue_vue_type_style_index_0_lang
+];
+
+export { AudioPlayerStyles_BD_Ry6xi as default };
+//# sourceMappingURL=AudioPlayer-styles.BD_Ry6xi.mjs.map

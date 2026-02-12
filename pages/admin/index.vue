@@ -22,13 +22,14 @@
 
     <hr>
 
-    <nuxt-child />
+    <NuxtPage />
   </div>
 </template>
 
 <script>
+definePageMeta({ middleware: 'auth' })
+
 export default {
-  middleware: ['auth'],
   head() {
     return {
       title: "Misc Administration"

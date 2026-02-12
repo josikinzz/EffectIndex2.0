@@ -35,7 +35,7 @@
 
     <ul class="linkList">
       <li 
-        v-for="(link, index) in value"
+        v-for="(link, index) in currentValue"
         :key="link.location"
         class="linkListItem"
       >
@@ -58,7 +58,12 @@
 
 <script>
 export default {
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
@@ -71,21 +76,28 @@ export default {
       descriptionInput: ""
     };
   },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    }
+  },
   methods: {
     addLink() {
-      let newValue = this.value.slice();
+      let newValue = this.currentValue.slice();
       newValue.push({
         location: this.locationInput,
         title: this.titleInput,
         description: this.descriptionInput
       });
 
+      this.$emit("update:modelValue", newValue);
       this.$emit("input", newValue);
       this.clearInputs();
     },
     removeLink(index) {
-      let newValue = this.value.slice();
+      let newValue = this.currentValue.slice();
       newValue.splice(index, 1);
+      this.$emit("update:modelValue", newValue);
       this.$emit("input", newValue);
       this.clearInputs();
     },

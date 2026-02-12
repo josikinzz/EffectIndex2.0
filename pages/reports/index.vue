@@ -88,96 +88,89 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import reportItem from "@/components/reports/reportList__item";
 import viewSelector from "@/components/reports/reportList__viewSelector";
 import Icon from '@/components/Icon';
-import { sortBy } from "lodash";
+import lodash from 'lodash';
 
-export default {
-  reportCache: [],
-  components: {
-    reportItem,
-    viewSelector,
-    Icon
-  },
-  data() {
-    return {
-      viewMode: {
-        name: "substance",
-        direction: true
-      }
-    };
-  },
-  async fetch({ store }) {
-    await store.dispatch("reports/get");
-    await store.dispatch("profiles/get");
-  },
-  head() {
-    return {
-      title: "Trip Reports"
-    };
-  },
-  computed: {
-    reports() {
-      return this.$store.state.reports.list.filter((report) => !report.unpublished);
-    },
-    profileNames() {
-      return this.$store.state.profiles.list.map(profile => profile.username);
-    },
-    substances() {
-      let substanceList = new Set();
-      this.reports.forEach(report => {
-        if (report.substances.length > 1) substanceList.add("Combinations");
-        else
-          report.substances.forEach(substance =>
-            substanceList.add(substance.name)
-          );
-      });
-      return Array.from(substanceList);
-    },
-    authors() {
-      let authorList = new Set();
-      this.reports.forEach(report => {
-        authorList.add(report.subject.name);
-      });
-      return Array.from(authorList);
-    },
-    sortedSubstances() {
-      let sorted = sortBy(this.substances);
-      return this.viewMode.direction ? sorted : sorted.reverse();
-    },
-    sortedAuthors() {
-      let sorted = sortBy(this.authors);
-      return this.viewMode.direction ? sorted : sorted.reverse();
-    },
-    reportsByTitle() {
-      let sorted = sortBy(this.reports, ["title"]);
-      return this.viewMode.direction ? sorted : sorted.reverse();
-    },
-    reportsByTripDate() {
-      let sorted = sortBy(this.report, report => report.subject.trip_date);
-      return this.viewMode.direction ? sorted : sorted.reverse();
-    }
-  },
-  methods: {
-    hasProfile(name) {
-      return this.profileNames[this.profileNames.indexOf(name)];
-    },
-    filterReportsBySubstance(name) {
-        return name === 'Combinations' ?
-        this.reports.filter((report) => Array.isArray(report.substances) && report.substances.length > 1) :
-        this.reports.filter((report) => Array.isArray(report.substances) && report.substances.find((substance) => substance.name === name));
-    },
-    filterReportsByAuthor(author) {
-      return this.reports.filter(report => report.subject.name === author);
-    },
-    selectView(view) {
-      if (this.viewMode.name === view)
-        this.viewMode.direction = !this.viewMode.direction;
-      else this.viewMode.name = view;
-    }
-  }
+const { sortBy } = lodash;
+
+useHead({ title: "Trip Reports" });
+
+const { $store } = useNuxtApp();
+await useAsyncData('reports:list', async () => {
+  await $store.dispatch("reports/get");
+  await $store.dispatch("profiles/get");
+  return {};
+});
+
+const viewMode = reactive({
+  name: "substance",
+  direction: true
+});
+
+const reports = computed(() => $store.state.reports.list.filter((report) => !report.unpublished));
+const profileNames = computed(() => $store.state.profiles.list.map(profile => profile.username));
+
+const substances = computed(() => {
+  const substanceList = new Set();
+  reports.value.forEach(report => {
+    if (report.substances.length > 1) substanceList.add("Combinations");
+    else
+      report.substances.forEach(substance =>
+        substanceList.add(substance.name)
+      );
+  });
+  return Array.from(substanceList);
+});
+
+const authors = computed(() => {
+  const authorList = new Set();
+  reports.value.forEach(report => {
+    authorList.add(report.subject.name);
+  });
+  return Array.from(authorList);
+});
+
+const sortedSubstances = computed(() => {
+  const sorted = sortBy(substances.value);
+  return viewMode.direction ? sorted : sorted.reverse();
+});
+
+const sortedAuthors = computed(() => {
+  const sorted = sortBy(authors.value);
+  return viewMode.direction ? sorted : sorted.reverse();
+});
+
+const reportsByTitle = computed(() => {
+  const sorted = sortBy(reports.value, ["title"]);
+  return viewMode.direction ? sorted : sorted.reverse();
+});
+
+const reportsByTripDate = computed(() => {
+  const sorted = sortBy(reports.value, report => report.subject.trip_date);
+  return viewMode.direction ? sorted : sorted.reverse();
+});
+
+const hasProfile = (name) => {
+  return profileNames.value[profileNames.value.indexOf(name)];
+};
+
+const filterReportsBySubstance = (name) => {
+  return name === 'Combinations'
+    ? reports.value.filter((report) => Array.isArray(report.substances) && report.substances.length > 1)
+    : reports.value.filter((report) => Array.isArray(report.substances) && report.substances.find((substance) => substance.name === name));
+};
+
+const filterReportsByAuthor = (author) => {
+  return reports.value.filter(report => report.subject.name === author);
+};
+
+const selectView = (view) => {
+  if (viewMode.name === view)
+    viewMode.direction = !viewMode.direction;
+  else viewMode.name = view;
 };
 </script>
 

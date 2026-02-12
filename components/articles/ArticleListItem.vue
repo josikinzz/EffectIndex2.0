@@ -4,9 +4,9 @@
       <div class="left-side">
         <div class="titles">
           <h3>
-            <nuxt-link :to="`/articles/${article.slug}`">
+            <a :href="`/articles/${article.slug}`">
               {{ article.title }}
-            </nuxt-link>
+            </a>
             <icon
               v-if="article.featured && showFeaturedIcon"
               filename="star.svg"

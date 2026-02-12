@@ -8,31 +8,25 @@
   </div>
 </template>
 
-<script>
-  import ArticleEditor from '@/components/articles/ArticleEditor.vue';
+<script setup>
+definePageMeta({ middleware: 'auth' });
 
-  export default {
-    components: {
-      ArticleEditor
-    },
-    middleware: ['auth'],
-    data() {
-      return {
-        people: undefined
-      };
-    },
-    async fetch() {
-      try {
-        const { people } = await this.$axios.$get(`/api/persons`);
-        this.people = people;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    methods: {
-      async submitPost(article) {
-        const results = await this.$axios.$post('/api/articles', { article });
-      }
-    }
-  };
+import ArticleEditor from '@/components/articles/ArticleEditor.vue';
+
+const apiFetch = useApiFetch();
+
+const { data } = await useAsyncData('admin:articles:new', async () => {
+  try {
+    return await apiFetch(`/api/persons`);
+  } catch (error) {
+    console.log(error);
+    return { people: [] };
+  }
+});
+
+const people = computed(() => data.value?.people ?? []);
+
+const submitPost = async (article) => {
+  await apiFetch('/api/articles', { method: 'POST', body: { article } });
+};
 </script>

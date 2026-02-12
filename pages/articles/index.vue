@@ -51,60 +51,45 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import ArticleListItem from '@/components/articles/ArticleListItem';
 import ArticleViewSelector from '@/components/articles/ArticleViewSelector';
 import AuthorInfo from '@/components/articles/AuthorInfo';
 import Icon from '@/components/Icon';
 
-export default {
-  components: {
-    ArticleListItem,
-    ArticleViewSelector,
-    Icon,
-    AuthorInfo
-  },
-  data () {
-    return {
-      articles: undefined,
-      authors: undefined,
-      viewMode: 'publishDate', // publishDate, author, title
-      sortDirection: true // true -> asc, false -> desc
-    };
-  },
-  async fetch() {
-    try {
-      const { articles, authors } = await this.$axios.$get('/api/articles');
-      this.articles = articles;
-      this.authors = authors;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  computed: {
-    sortedAuthors () {
-      return this.sortDirection ? this.authors : this.authors.slice().reverse();
-    },
-    sortedArticles () {
-      const { articles } = this;
-      if (articles) {
-        return this.sortDirection ? articles : articles.slice().reverse();
-      } else return undefined;
-    },
-    articlesSortedByTitle() {
-      const byTitle = this.articles.slice().sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase());
-      return this.sortDirection ? byTitle : byTitle.reverse();
-    }
-  },
-  methods: {
-    changeView(viewMode) {
-      if (viewMode === this.viewMode) this.sortDirection = !this.sortDirection;
-      else this.viewMode = viewMode;
-    },
-    articlesByAuthor(id) {
-      return this.articles.filter(article => article.authors.some(articleAuthor => articleAuthor._id === id));
-    }
-  }
+const viewMode = ref('publishDate');
+const sortDirection = ref(true);
+
+const apiFetch = useApiFetch();
+const { data } = await useAsyncData('articles:index', () => apiFetch('/api/articles'));
+
+const articles = computed(() => data.value?.articles ?? []);
+const authors = computed(() => data.value?.authors ?? []);
+
+const sortedAuthors = computed(() => {
+  return sortDirection.value ? authors.value : authors.value.slice().reverse();
+});
+
+const sortedArticles = computed(() => {
+  return sortDirection.value ? articles.value : articles.value.slice().reverse();
+});
+
+const articlesSortedByTitle = computed(() => {
+  const byTitle = articles.value
+    .slice()
+    .sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase());
+  return sortDirection.value ? byTitle : byTitle.reverse();
+});
+
+const changeView = (mode) => {
+  if (mode === viewMode.value) sortDirection.value = !sortDirection.value;
+  else viewMode.value = mode;
+};
+
+const articlesByAuthor = (id) => {
+  return articles.value.filter(article =>
+    article.authors.some(articleAuthor => articleAuthor._id === id)
+  );
 };
 </script>
 

@@ -51,48 +51,32 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Icon from '@/components/Icon';
 
-export default {
-  components: {
-    Icon
-  },
-  data() {
-    return {
-      articles: undefined
-    };
-  },
-  async fetch() {
-    try {
-      const results = await this.$axios.get('/api/articles/admin');
-      const { articles } = results.data;
-      this.articles = articles;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  methods: {
-    async deleteArticle(id) {
-      try {
-        const result = await this.$axios.delete(`/api/articles/${id}`);
+definePageMeta({ middleware: 'auth' });
 
-        this.$toasted.show(
-          'The report has been successfully deleted.',
-          {
-            duration: 2000,
-            type: 'success'
-          }
-        );
+const apiFetch = useApiFetch();
+const { $toast } = useNuxtApp();
 
-        this.$fetch();
+const { data, refresh } = await useAsyncData('admin:articles:list', async () => {
+  const { articles } = await apiFetch('/api/articles/admin');
+  return { articles };
+});
 
-      } catch (error) {
-        console.log(error);
-      }
+const articles = computed(() => data.value?.articles ?? []);
 
+const loadArticles = async () => {
+  await refresh();
+};
 
-    }
+const deleteArticle = async (id) => {
+  try {
+    await apiFetch(`/api/articles/${id}`, { method: 'DELETE' });
+    $toast?.success?.('The report has been successfully deleted.', { timeout: 2000 });
+    await loadArticles();
+  } catch (error) {
+    console.log(error);
   }
 };
 </script>

@@ -134,14 +134,14 @@
     <h3> See Also </h3>
     <ul>
       <li>
-        <nuxt-link to="/summaries/psychedelics/visual">
+        <a href="/summaries/psychedelics/visual">
           Visual Psychedelic Effects
-        </nuxt-link>
+        </a>
       </li>
       <li>
-        <nuxt-link to="/summaries/deliriants/">
+        <a href="/summaries/deliriants/">
           Deliriant Subjective Effects
-        </nuxt-link>
+        </a>
       </li>
     </ul>
   </div>
@@ -173,7 +173,14 @@ export default {
       return this.$store.state.effects.list;
     }
   },
-  watchQuery: ['e'],
+  watch: {
+    '$route.query.e'(value) {
+      this.linkedEffect = value;
+      if (value) {
+        this.$scrollTo(`#${value}`);
+      }
+    }
+  },
   mounted() {
     if (this.linkedEffect) {
       this.$scrollTo(`#${this.linkedEffect}`);

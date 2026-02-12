@@ -1,18 +1,12 @@
 <template>
   <div>
-    <nuxt-child />
+    <NuxtPage />
   </div>
 </template>
 
-<script>
-  export default {
-    async fetch ({ store }) {
-      await store.dispatch("effects/get");
-    },
-    head() {
-      return {
-        title: "Categories"
-      };
-    },
-  };
+<script setup>
+useHead({ title: "Categories" });
+
+const { $store } = useNuxtApp();
+await useAsyncData('categories:effects', () => $store.dispatch("effects/get"));
 </script>

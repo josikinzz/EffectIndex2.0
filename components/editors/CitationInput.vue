@@ -90,7 +90,12 @@ export default {
     Citation,
     CitationList
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
@@ -105,14 +110,17 @@ export default {
     };
   },
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
     citations() {
-      return this.value.filter((citation) => citation);
+      return this.currentValue.filter((citation) => citation);
     }
   },
   methods: {
     addToList() {
       if (this.from) {
-        let citationList = this.value.slice();
+        let citationList = this.currentValue.slice();
         citationList[Number(this.from) - 1] = {
           url: this.url,
           text: this.text,
@@ -124,7 +132,7 @@ export default {
       }
     },
     selectCitation(index) {
-      let citation = this.value[index];
+      let citation = this.currentValue[index];
 
       if (citation) {
         this.url = citation.url;
@@ -134,12 +142,14 @@ export default {
       }
     },
     removeFromList(index) {
-      let citationList = this.value.slice();
+      let citationList = this.currentValue.slice();
       citationList.splice(index, 1);
       this.update(citationList);
     },
     update(citationList) {
-      this.$emit("input", citationList.filter(citation => citation));
+      const next = citationList.filter(citation => citation);
+      this.$emit("update:modelValue", next);
+      this.$emit("input", next);
     },
     clear() {
       (this.url = ""),

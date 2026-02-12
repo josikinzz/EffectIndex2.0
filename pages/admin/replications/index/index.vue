@@ -141,124 +141,105 @@
   </div>
 </template>
 
-<script>
+<script setup>
+definePageMeta({ middleware: 'auth', scrollToTop: true });
+
 import ReplicationTableRow from "@/components/replications/ReplicationTableRow.vue";
-import { debounce, sortBy } from 'lodash';
+import lodash from 'lodash';
 import Icon from '@/components/Icon';
 
-export default {
-  name: 'ReplicationManagementList',
-  components: {
-    ReplicationTableRow,
-    Icon
-  },
-  middleware: ["auth"],
-  scrollToTop: true,
-  data() {
-    return {
-      filter: "",
-      focused: false,
-      thumbs: false,
-      options: {
-        thumbs: false,
-        sortBy: {
-          column: 'title',
-          direction: 'descending'
-        }
-      }
-    };
-  },
-  async fetch({ store }) {
-    await store.dispatch("replications/get");
-    await store.dispatch("effects/get");
-  },
-  computed: {
-    replications() {
-      return this.$store.state.replications.list;
-    },
-    effects() {
-      return this.$store.state.effects.list;
-    },
-    filteredEffects() {
-      return this.effects.filter((effect) => effect.name.toLowerCase().indexOf(this.filter.toLowerCase()) > -1);;
-    },
-    filteredReplications() {
-      if (!this.filter) return this.replications;
+const { debounce, sortBy: sortByFn } = lodash;
 
-      let effectIds = this.filteredEffects.map(effect => effect._id);
+const { $store, $toast } = useNuxtApp();
+const apiFetch = useApiFetch();
 
-      let filteredReplications = this.replications.filter(
-        replication => replication.associated_effects.some(
-          associated_effect => effectIds.includes(associated_effect)
-      ));
-
-      return filteredReplications;
-    },
-    sortedReplications() {
-      const { column, direction } = this.options.sortBy;
-      if (column && direction) {
-        const sorted = sortBy(this.replications, [column.toLowerCase()]);
-        return direction === 'ascending' ? sorted : sorted.reverse();
-      } else return this.replications;
-
-    }
-  },
-  methods: {
-    sortBy(column, direction) {
-      if (column && direction) {
-        this.options.sortBy.column = column;
-        this.options.sortBy.direction = direction;
-      }
-    },
-    async deleteReplication(id) {
-
-
-      this.$toasted.show('Really delete?', {
-        action: [{
-          text: 'Yes, delete!',
-          onClick: async (e, toastObject) => {
-            try {
-              await this.$axios.$delete(`/api/replications/${id}`);
-              toastObject.goAway(0);
-              this.$store.dispatch("replications/get");
-              this.$toasted.show(
-                'The replication has been successfully deleted.',
-                { duration: 2000, type: 'success' }
-              );
-            } catch (e) {
-              if (e.response) {
-                const { error } = e.response.data;
-                this.$toasted.show(error.message, { duration: 2000, type: 'error' });
-                toastObject.goAway(0);
-              } else {
-                console.log(e);
-              }
-            }
-          }
-        },
-        {
-          text: 'No, keep!',
-          onClick: (e, toastObject) => toastObject.goAway()
-        }]
-      });
-    },
-    clearFilter() {
-      this.filter = "";
-    },
-    selectEffectName(name) {
-      this.filter = name.toLowerCase();
-    },
-    focus() {
-      this.focused = true;
-    },
-    blur() {
-      setTimeout(() => this.focused = false, 100);
-    },
-    debouncedInput: debounce(function(e) {
-      this.filter = e.target.value;
-    }, 150)
+const filter = ref("");
+const focused = ref(false);
+const options = reactive({
+  thumbs: false,
+  sortBy: {
+    column: 'title',
+    direction: 'descending'
   }
-  };
+});
+
+await useAsyncData('admin:replications', async () => {
+  await $store.dispatch("replications/get");
+  await $store.dispatch("effects/get");
+  return {};
+});
+
+const replications = computed(() => $store.state.replications.list);
+const effects = computed(() => $store.state.effects.list);
+
+const filteredEffects = computed(() => {
+  return effects.value.filter((effect) => effect.name.toLowerCase().indexOf(filter.value.toLowerCase()) > -1);
+});
+
+const filteredReplications = computed(() => {
+  if (!filter.value) return replications.value;
+
+  const effectIds = filteredEffects.value.map(effect => effect._id);
+
+  const filtered = replications.value.filter(
+    replication => replication.associated_effects.some(
+      associated_effect => effectIds.includes(associated_effect)
+  ));
+
+  return filtered;
+});
+
+const sortedReplications = computed(() => {
+  const { column, direction } = options.sortBy;
+  if (column && direction) {
+    const sorted = sortByFn(replications.value, [column.toLowerCase()]);
+    return direction === 'ascending' ? sorted : sorted.reverse();
+  }
+  return replications.value;
+});
+
+const sortBy = (column, direction) => {
+  if (column && direction) {
+    options.sortBy.column = column;
+    options.sortBy.direction = direction;
+  }
+};
+
+const deleteReplication = async (id) => {
+  if (!confirm('Really delete?')) return;
+  try {
+    await apiFetch(`/api/replications/${id}`, { method: 'DELETE' });
+    await $store.dispatch("replications/get");
+    $toast?.success?.('The replication has been successfully deleted.', { timeout: 2000 });
+  } catch (e) {
+    const message = e?.data?.error?.message || e?.response?._data?.error?.message;
+    if ($toast?.error) {
+      $toast.error(message || 'There was an error deleting the replication.', { timeout: 2000 });
+    } else {
+      console.log(e);
+    }
+  }
+};
+
+const clearFilter = () => {
+  filter.value = "";
+};
+
+const selectEffectName = (name) => {
+  filter.value = name.toLowerCase();
+};
+
+const focus = () => {
+  focused.value = true;
+};
+
+const blur = () => {
+  setTimeout(() => { focused.value = false; }, 100);
+};
+
+const debouncedInput = debounce((e) => {
+  filter.value = e.target.value;
+}, 150);
 </script>
 
 <style scoped>

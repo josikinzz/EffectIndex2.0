@@ -46,18 +46,24 @@ export default {
       profileImage: undefined
     };
   },
-  async fetch() {
-    try {
-      if (this.profile) {
-        const {person} = await this.$axios.$get(`/api/persons/${this.profile}`);
-        if (person) {
-          this.profileImage = person.profile_image ? `/${person.profile_image}` : undefined;
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  mounted() {
+    this.loadProfileImage();
   },
+  methods: {
+    async loadProfileImage() {
+      try {
+        if (this.profile) {
+          const apiFetch = useApiFetch();
+          const {person} = await apiFetch(`/api/persons/${this.profile}`);
+          if (person) {
+            this.profileImage = person.profile_image ? `/${person.profile_image}` : undefined;
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 };
 </script>
 

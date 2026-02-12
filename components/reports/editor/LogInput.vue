@@ -31,7 +31,7 @@
     <table class="logTable">
       <tbody>
         <tr 
-          v-for="(item, index) in value"
+          v-for="(item, index) in currentValue"
           :key="index"
         >
           <td class="itemTime">
@@ -82,10 +82,20 @@ export default {
   components: {
     Icon
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
+    }
+  },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
     }
   },
   data() {
@@ -102,24 +112,26 @@ export default {
     },
 
     addItem() {
-      let list = [ ...this.value ];
+      let list = [ ...this.currentValue ];
 
       list.push({ time: this.time, description: this.description });
 
+      this.$emit('update:modelValue', list);
       this.$emit('input', list);
       this.clear();
     },
 
     removeItem(index) {
-      let list = [ ...this.value ];
+      let list = [ ...this.currentValue ];
 
       list.splice(index, 1);
 
+      this.$emit('update:modelValue', list);
       this.$emit('input', list);
     },
     
     moveItemUp(index) {
-      let list = [ ...this.value ];
+      let list = [ ...this.currentValue ];
 
       if (index > 0) {
         let swap = list[index];
@@ -127,11 +139,12 @@ export default {
         list[index - 1] = swap;
       }
 
+      this.$emit('update:modelValue', list);
       this.$emit('input', list);
     },
 
     moveItemDown(index) {
-      let list = [ ...this.value ];
+      let list = [ ...this.currentValue ];
 
       if (index < (list.length - 1)) {
         let swap = list[index];
@@ -139,6 +152,7 @@ export default {
         list[index + 1] = swap;
       }
 
+      this.$emit('update:modelValue', list);
       this.$emit('input', list);
     }
   }

@@ -6,13 +6,14 @@
 </template>
 
 <script>
+definePageMeta({ middleware: 'auth' })
+
 import EffectEditor from "@/components/effects/editor/EffectEditor";
 
 export default {
   components: {
     EffectEditor
   },
-  middleware: ["auth"],
   methods: {
     async submitEffect(effect) {
 

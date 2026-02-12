@@ -28,7 +28,6 @@
           v-model="value"
           class="my-editor"
           :highlight="highlighter"
-          @input="codeModified"
         />
       </client-only>
     </div>

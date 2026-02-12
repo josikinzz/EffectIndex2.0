@@ -1,0 +1,8 @@
+const CitationList_vue_vue_type_style_index_0_lang = ".citationList{display:grid;font-size:14px;font-weight:700;grid-template-columns:1fr 1fr;padding-left:0}.citationList li{font-weight:700;margin:10px;min-width:300px;padding:.25em 0;-moz-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}.citationText{color:#444}.citationSeparator{color:#aaa}.citation__contents{font-weight:400;margin-left:5px}@media(max-width:640px){.citationList{grid-template-columns:1fr}.citationList li{word-break:break-all}.citation__contents{margin-left:0}}.citationList li:target{background-color:#eee}.citationList a:link{color:#3d9991}";
+
+const CitationListStyles_DlAD4RWU = [
+  CitationList_vue_vue_type_style_index_0_lang
+];
+
+export { CitationListStyles_DlAD4RWU as default };
+//# sourceMappingURL=CitationList-styles.DlAD4RWU.mjs.map

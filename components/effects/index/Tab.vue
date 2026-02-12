@@ -1,6 +1,5 @@
 <template>
   <div class="tab">
-    <div class="mask" />
     <slot />
   </div>
 </template>
@@ -12,16 +11,6 @@ export default {
 </script>
 
 <style scoped>
-
-.mask {
-  position: absolute;
-  top: 0px;
-  left: -1px;
-  width: calc(100% + 2px);
-  height: 100%;
-  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 275px);
-  z-index: 2;
-}
 
 .tab {
   position: relative;
@@ -38,10 +27,6 @@ export default {
   .tab {
     padding: 0;
     border: 0;
-  }
-
-  .mask {
-    display: none;
   }
 }
 

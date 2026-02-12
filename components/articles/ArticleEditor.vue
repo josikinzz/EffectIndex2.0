@@ -145,16 +145,23 @@ export default {
   methods: {
     async submitArticle() {
       try {
+        const apiFetch = useApiFetch();
         if (this.isNew) {
           const submission = {...this.article};
           delete submission.body.parsed;
-          const {article} = await this.$axios.$post('/api/articles', {article: submission});
+          const {article} = await apiFetch('/api/articles', {
+            method: 'POST',
+            body: { article: submission }
+          });
           this.$router.push(`/articles/${article.slug}`);
         } else {
           const {_id} = this.article;
           const submission = {...this.article};
           delete submission.body.parsed;
-          const {article} = await this.$axios.$post(`/api/articles/${_id}`, {article: submission});
+          const {article} = await apiFetch(`/api/articles/${_id}`, {
+            method: 'POST',
+            body: { article: submission }
+          });
 
           this.$router.push(`/articles/${article.slug}`);
         }

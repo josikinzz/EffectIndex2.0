@@ -1,5 +1,5 @@
 <template>
-  <Panel
+  <FrontpagePanel
     icon="images.svg"
     title="Featured Replications"
     description="Artistic representations of specific subjective effects"
@@ -8,9 +8,7 @@
       <div 
         v-touch:swipe.left="nextImage"
         v-touch:swipe.right="previousImage"
-        :style="{
-          backgroundImage: imageUrl
-        }" 
+        :style="'background-image: url(\'' + imageUrl + '\');'"
         class="replicationImage"
         @click="toggleModal"
       >
@@ -19,7 +17,7 @@
           style="position:relative; height: 300px;"
         >
           <iframe
-            :src="`https://gfycat.com/ifr/${replication.resource}?controls=0`"
+            :src="`https://streamable.com/e/${replication.resource}?autoplay=1&loop=1`"
             frameborder="0"
             scrolling="no"
             width="100%"
@@ -71,18 +69,20 @@
         replications gallery.
       </nuxt-link>
     </template>
-  </Panel>
+  </FrontpagePanel>
 </template>
 
 <script>
-import { shuffle } from 'lodash';
+import lodash from 'lodash';
 import Icon from '@/components/Icon';
-import Panel from '@/components/home/Panel';
+import FrontpagePanel from '@/components/home/Panel';
+
+const { shuffle } = lodash;
 
 export default {
   components: {
     Icon,
-    Panel
+    FrontpagePanel
   },
   data() {
     return {
@@ -120,15 +120,15 @@ export default {
 
     imageUrl() {
       if (this.replication.type === 'image') {
-        const prefix = '/img/gallery';
-        return `url("${prefix}/${this.replication.resource}"`; 
+        console.log(this.replication.resource);
+        return this.replication.resource; 
       } else return undefined;
     },
 
     modalData() {
       return {
         type: 'image',
-        resource: '/img/gallery/' + this.replication.resource
+        resource: this.replication.resource
       };
     },
 

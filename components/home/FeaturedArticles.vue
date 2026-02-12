@@ -1,5 +1,5 @@
 <template>
-  <Panel
+  <FrontpagePanel
     icon="file-invoice.svg"
     title="Featured Article"
     description="Analyses that go beyond individual subjective effects"
@@ -18,18 +18,20 @@
         articles section.
       </nuxt-link>
     </template>
-  </Panel>
+  </FrontpagePanel>
 </template>
 
 <script>
-import Panel from '@/components/home/Panel';
+import FrontpagePanel from '@/components/home/Panel';
 import FeaturedArticle from '@/components/home/FeaturedArticle';
-import { shuffle } from 'lodash';
+import lodash from 'lodash';
+
+const { shuffle } = lodash;
 
 export default {
   components: {
     FeaturedArticle,
-    Panel
+    FrontpagePanel
   },
 
   props: {
@@ -73,7 +75,7 @@ export default {
     border-bottom: 1px solid #DDD;
   }
 
-  .featuredArticle >>> .articleDescription {
+  .featuredArticle :deep(.articleDescription) {
     margin: 0;
     margin-top: 1em;
     font-size: 0.95em;
@@ -81,19 +83,19 @@ export default {
     color: #666;
   }
 
-  .featuredArticle >>> .articleAuthors {
+  .featuredArticle :deep(.articleAuthors) {
     font-size: 0.9em;
     font-style: italic;
   }
 
-  .featuredArticle >>> .articleInfo {
+  .featuredArticle :deep(.articleInfo) {
     display: flex;
     flex-direction: row;
     font-size: 0.9em;
     color: #AAA;
   }
 
-  .featuredArticle >>> .articleInfo .separator {
+  .featuredArticle :deep(.articleInfo .separator) {
     margin: 0 5px;
   }
 

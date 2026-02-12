@@ -26,13 +26,14 @@
 </template>
 
 <script>
+definePageMeta({ middleware: 'auth' })
+
 import EffectTableRow from "@/components/effects/EffectTableRow.vue";
 
 export default {
   components: {
     EffectTableRow
   },
-  middleware: ["auth"],
   scrollToTop: true,
   data() {
     return {

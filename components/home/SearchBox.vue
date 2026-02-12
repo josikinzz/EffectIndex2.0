@@ -28,36 +28,47 @@
 </template>
 
 <script>
-import { debounce } from 'lodash';
+import lodash from 'lodash';
+import { mapState } from 'pinia';
 import Icon from '@/components/Icon';
+import { useSearchStore } from '~/stores/search';
+
+const { debounce } = lodash;
 
 export default {
   components: {
     Icon
   },
   computed: {
-    searchInput() {
-      return this.$store.state.search.input;
-    }
+    ...mapState(useSearchStore, {
+      searchInput: 'input',
+      searchResults: 'results'
+    })
   },
-  created() {
-    let subscription = this.$store.subscribe((mutation, state) => {
-      const { total_results } = state.search.results;
-      if (mutation.type === 'search/set_results' && (total_results > 0)) {
-        this.$router.push('/search');
+  watch: {
+    searchResults: {
+      deep: true,
+      handler(results) {
+        const totalResults = results?.total_results ?? 0;
+        if (totalResults > 0) {
+          this.$router.push('/search');
+        }
       }
-    });
+    }
   },
   methods: {
     changeSearchInput(e) {
-      this.$store.commit('search/change_input', e.target.value);
+      const searchStore = useSearchStore();
+      searchStore.change_input(e.target.value);
       this.performSearch();
     },
     performSearch: debounce(function() {
-      this.$store.dispatch('search/search', this.searchInput);
+      const searchStore = useSearchStore();
+      searchStore.search(this.searchInput);
     }, 400, {trailing: true}),
     clear() {
-      this.$store.commit('search/clear_input');
+      const searchStore = useSearchStore();
+      searchStore.clear_input();
       this.$refs.searchInput.focus();
     }
   },

@@ -56,6 +56,15 @@ export default {
   width: 220px;
   height: 100%;
   background-color: #2e2e2e;
+  display: none;
+  pointer-events: none;
+  transform: translateX(220px);
+  transition: transform 0.25s ease-out;
+}
+
+.navbarPullout.active {
+  pointer-events: auto;
+  transform: translateX(0);
 }
 
 .navbarPullout__menu {
@@ -66,5 +75,11 @@ export default {
   text-transform: uppercase;
   margin-top: 8px;
   list-style: none;
+}
+
+@media (max-width: 1100px) {
+  .navbarPullout {
+    display: block;
+  }
 }
 </style>

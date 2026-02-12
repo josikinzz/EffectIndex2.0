@@ -43,47 +43,52 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import fecha from 'fecha';
 
-export default {
-  data() {
-    return {
-      invitations: []
-    };
-  },
-  async fetch() {
-    try {
-      const { invitations } = await this.$axios.$get('/api/invitations');
-      this.invitations = invitations;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  methods: {
-    parseDate(date) {
-      try {
-      const formatted = fecha.format(new Date(date), 'DD/MM/YYYY hh:mm:ss');
-      return formatted;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    copyCode(code) {
-      const { protocol, hostname, port } = window.location;
-      const url = `${protocol}//${hostname}${port ? ':' + port : ''}/user/register/${code}`;
-       this.$toasted.show('Registration URL copied to clipboard', { type: 'success', duration: 2000 });
-      navigator.clipboard.writeText(url);
-    },
-    async deleteInvitation(id) {
-      try {
-        await this.$axios.$delete(`/api/invitations/${id}`);
-        this.$toasted.show('The invitation was successfully deleted.', { type: 'success', duration: 2000 });
-        this.$fetch();
-      } catch (error) {
-        console.log(error);
-      }
-    }
+definePageMeta({ middleware: 'auth' });
+
+const apiFetch = useApiFetch();
+const { $toast } = useNuxtApp();
+
+const { data, refresh } = await useAsyncData('admin:invitations', async () => {
+  try {
+    const { invitations } = await apiFetch('/api/invitations');
+    return { invitations };
+  } catch (error) {
+    console.log(error);
+    return { invitations: [] };
+  }
+});
+
+const invitations = computed(() => data.value?.invitations ?? []);
+
+const loadInvitations = async () => {
+  await refresh();
+};
+
+const parseDate = (date) => {
+  try {
+    return fecha.format(new Date(date), 'DD/MM/YYYY hh:mm:ss');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const copyCode = (code) => {
+  const { protocol, hostname, port } = window.location;
+  const url = `${protocol}//${hostname}${port ? ':' + port : ''}/user/register/${code}`;
+  $toast?.success?.('Registration URL copied to clipboard', { timeout: 2000 });
+  navigator.clipboard.writeText(url);
+};
+
+const deleteInvitation = async (id) => {
+  try {
+    await apiFetch(`/api/invitations/${id}`, { method: 'DELETE' });
+    $toast?.success?.('The invitation was successfully deleted.', { timeout: 2000 });
+    await loadInvitations();
+  } catch (error) {
+    console.log(error);
   }
 };
 </script>

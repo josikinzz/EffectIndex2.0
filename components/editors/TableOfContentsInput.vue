@@ -39,7 +39,12 @@ export default {
   components: {
     TableOfContentsItem
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => ([])
@@ -49,8 +54,20 @@ export default {
     return {
       name: undefined,
       id: undefined,
-      items: this.value
+      items: this.modelValue !== undefined ? this.modelValue : this.value
     };
+  },
+  watch: {
+    modelValue(value) {
+      if (value) {
+        this.items = value;
+      }
+    },
+    value(value) {
+      if (this.modelValue === undefined && value) {
+        this.items = value;
+      }
+    }
   },
   methods: {
     addItem() {
@@ -95,6 +112,7 @@ export default {
       this.changed();
     },
     changed() {
+      this.$emit('update:modelValue', this.items);
       this.$emit('input', this.items);
     }
   }
@@ -133,4 +151,3 @@ export default {
     background-color: #DFD;
   }
 </style>
-

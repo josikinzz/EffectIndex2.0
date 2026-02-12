@@ -1,11 +1,11 @@
 <template>
   <div class="personDropdown">
     <select
-      :value="value"
+      :value="currentValue"
       @change="handleChange"
     >
       <option
-        :selected="!value"
+        :selected="!currentValue"
         disabled
         hidden
         value=""
@@ -14,7 +14,7 @@
         v-for="p in people"
         :key="p._id"
         :value="p._id"
-        :selected="value === p._id"
+        :selected="currentValue === p._id"
       >
         {{ p.full_name }} 
         <template v-if="p.alias">
@@ -28,7 +28,12 @@
 
 <script>
 export default {
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: String,
+      default: undefined
+    },
     value: {
       type: String,
       default: undefined
@@ -39,21 +44,32 @@ export default {
       people: []
     };
   },
-  async fetch() {
-    try {
-      const { people } = await this.$axios.$get('/api/persons');
-      this.people = people;
-    } catch (error) {
-      console.log(error);
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
     }
   },
+  mounted() {
+    this.loadPeople();
+  },
   methods: {
+    async loadPeople() {
+      try {
+        const apiFetch = useApiFetch();
+        const { people } = await apiFetch('/api/persons');
+        this.people = people;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     handleChange(e) {
       const { value } = e.target;
       const person = this.people.find(person => person._id === value);
+      this.$emit('update:modelValue', person._id);
       this.$emit('input', person._id);
     },
     clearPerson() {
+      this.$emit('update:modelValue', undefined);
       this.$emit('input', undefined);
     }
   }

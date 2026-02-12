@@ -21,7 +21,7 @@
       </nuxt-link>
     </div>
     <hr>
-    <nuxt-child />
+    <NuxtPage />
   </div>
 </template>
 

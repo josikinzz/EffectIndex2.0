@@ -1,0 +1,1 @@
+import{am as t,an as a,ah as s,q as n,H as r,a8 as u}from"./PhNZAdwz.js";const g=t(i=>{const e=u();if(e.public.browseOnlyMode===!0||e.public.browseOnlyMode==="true")return a(s({statusCode:404,statusMessage:"Page Not Found"}));const{$auth:o}=n();if(!o.loggedIn)return r("/user/login")});export{g as default};

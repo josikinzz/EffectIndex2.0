@@ -15,87 +15,72 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AddPerson from '@/components/people/AddPerson';
 import Person from '@/components/people/Person';
 
-export default {
-  components: {
-    AddPerson,
-    Person
-  },
-  data() {
-    return {
-      people: undefined
-    };
-  },
-  async fetch() {
-    try {
-      const { people } = await this.$axios.$get('/api/persons/all');
-      this.people = people;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  head() {
-    return {
-      title: "Modify People"
-    };
-  },
-  methods: {
-    async newPerson(person) {
-      try {
-        await this.$axios.post('/api/persons', { person });
-        this.$toasted.show('The person was successfully created.', { duration: 2000, type: 'success' });
-        this.$fetch();
-      } catch (error) {
-        this.$toasted.show('There was an error saving the person. Check console.', { duration: 2000, type: 'error' });
-        console.log(error);
-      }
-    },
-    async updatePerson(person) {
-      try {
-        await this.$axios.put(`/api/persons/${person._id}`, { person });
-        this.$toasted.show('The person was successfully updated.', { duration: 2000, type: 'success' });
-        this.$fetch();
-      } catch (error) {
-        this.$toasted.show('There was an error updating the person. Check console.', { duration: 2000, type: 'error' });
-        console.log(error);
-      }
-    },
-    async saveMeta(person) {
-      try {
-        await this.$axios.$put(`/api/persons/meta/${person._id}`, { person });
-        this.$toasted.show('Person metadata was successfully saved.', { duration: 2000, type: 'success' });
-      } catch (error) {
-        this.$toasted.show('Metadata was not successfully saved. Check console.', { duration: 2000, type: 'error' });
-        console.log(error);
-      }
-    },
-    async deletePerson(person) {
-      try {
+definePageMeta({ middleware: 'auth' });
+useHead({ title: "Modify People" });
 
-        this.$toasted.show('Really delete?', {
-          action: [{
-              text: 'Yes, delete!',
-              onClick: async (e, toastObject) => {
-                await this.$axios.delete(`/api/persons/${person._id}`);
-                toastObject.goAway(0);
-                this.$fetch();
-              }
-            },
-            {
-              text: 'No, keep!',
-              onClick: (e, toastObject) => toastObject.goAway()
-            }]
-        });
+const apiFetch = useApiFetch();
+const { $toast } = useNuxtApp();
 
+const { data, refresh } = await useAsyncData('admin:people', async () => {
+  try {
+    const { people } = await apiFetch('/api/persons/all');
+    return { people };
+  } catch (error) {
+    console.log(error);
+    return { people: [] };
+  }
+});
 
-      } catch (error) {
-        this.$toasted.show('There was an error deleting the person. Check console.', { duration: 2000, type: 'error' });
-        console.log(error);
-      }
-    }
+const people = computed(() => data.value?.people ?? []);
+
+const loadPeople = async () => {
+  await refresh();
+};
+
+const newPerson = async (person) => {
+  try {
+    await apiFetch('/api/persons', { method: 'POST', body: { person } });
+    $toast?.success?.('The person was successfully created.', { timeout: 2000 });
+    await loadPeople();
+  } catch (error) {
+    $toast?.error?.('There was an error saving the person. Check console.', { timeout: 2000 });
+    console.log(error);
+  }
+};
+
+const updatePerson = async (person) => {
+  try {
+    await apiFetch(`/api/persons/${person._id}`, { method: 'PUT', body: { person } });
+    $toast?.success?.('The person was successfully updated.', { timeout: 2000 });
+    await loadPeople();
+  } catch (error) {
+    $toast?.error?.('There was an error updating the person. Check console.', { timeout: 2000 });
+    console.log(error);
+  }
+};
+
+const saveMeta = async (person) => {
+  try {
+    await apiFetch(`/api/persons/meta/${person._id}`, { method: 'PUT', body: { person } });
+    $toast?.success?.('Person metadata was successfully saved.', { timeout: 2000 });
+  } catch (error) {
+    $toast?.error?.('Metadata was not successfully saved. Check console.', { timeout: 2000 });
+    console.log(error);
+  }
+};
+
+const deletePerson = async (person) => {
+  try {
+    if (!confirm('Really delete?')) return;
+    await apiFetch(`/api/persons/${person._id}`, { method: 'DELETE' });
+    await loadPeople();
+  } catch (error) {
+    $toast?.error?.('There was an error deleting the person. Check console.', { timeout: 2000 });
+    console.log(error);
   }
 };
 </script>

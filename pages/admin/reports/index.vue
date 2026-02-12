@@ -13,13 +13,14 @@
     >
       New Report
     </nuxt-link>
-    <nuxt-child />
+    <NuxtPage />
   </div>
 </template>
 
 <script>
+definePageMeta({ middleware: 'auth' })
+
     export default {
-        middleware: ['auth'],
         head() {
           return {
             title: "Modify Reports"

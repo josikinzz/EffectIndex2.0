@@ -25,10 +25,10 @@
       <client-only>
         <prism-editor
           ref="prism"
-          :value="value"
+          :model-value="modelValue"
           class="my-editor"
           :highlight="highlighter"
-          @input="codeModified"
+          @update:model-value="codeModified"
         />
       </client-only>
     </div>
@@ -57,8 +57,9 @@ export default {
   components: {
     PrismEditor
   },
+  emits: ['update:modelValue'],
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: undefined
     },
@@ -76,7 +77,7 @@ export default {
   },
   computed: {
     formatted () {
-      return this.$vcode(this.value);
+      return this.$vcode(this.modelValue);
     }
   },
   watch: {
@@ -106,10 +107,7 @@ export default {
       this.tab = tab;
     },
     codeModified(code) {
-      this.$emit('input', code);
-    },
-    convertViscidcode() {
-      this.$emit('input', convert(this.value));
+      this.$emit('update:modelValue', code);
     }
   }
 };

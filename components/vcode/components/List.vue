@@ -37,8 +37,8 @@ export default {
     padding-left: 0;
   }
 
-  ul >>> li,
-  ol >>> li {
+  ul :deep(li),
+  ol :deep(li) {
     margin: 0.5em 0;
   }
 
@@ -50,7 +50,7 @@ export default {
     list-style: none;
   }
 
-  ul.dash >>> li:before {
+  ul.dash :deep(li)::before {
     content: "\2013";
     position: relative;
     left: -10px;

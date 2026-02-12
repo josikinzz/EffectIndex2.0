@@ -1,5 +1,5 @@
 <template>
-  <Panel
+  <FrontpagePanel
     icon="file-signature.svg"
     title="Featured Reports"
     description="Recommended firsthand accounts of hallucinogenic experiences"
@@ -21,18 +21,20 @@
         reports section.
       </nuxt-link>
     </template>
-  </Panel>
+  </FrontpagePanel>
 </template>
 
 <script>
-import Panel from '@/components/home/Panel';
+import FrontpagePanel from '@/components/home/Panel';
 import FeaturedReport from '@/components/home/FeaturedReport';
-import { shuffle } from 'lodash';
+import lodash from 'lodash';
+
+const { shuffle } = lodash;
 
 export default {
   components: {
     FeaturedReport,
-    Panel
+    FrontpagePanel
   },
 
   props: {
@@ -79,29 +81,29 @@ export default {
     border-bottom: 1px solid #DDD;
   }
 
-  .featuredReport >>> .reportInfo {
+  .featuredReport :deep(.reportInfo) {
     line-height: 1.1em;
     flex: 1;
     padding-right: 6px;
   }
 
-  .featuredReport >>> .reportSubstance {
+  .featuredReport :deep(.reportSubstance) {
     flex: 1;
     line-height: 1em;
     padding-left: 6px;
   }
 
-  .featuredReport >>> .reportAuthor {
+  .featuredReport :deep(.reportAuthor) {
     font-size: 0.9em;
     font-style: italic;
   }
 
-  .featuredReport >>> .reportSubstanceName {
+  .featuredReport :deep(.reportSubstanceName) {
     font-size: 1em;
     color: #666;
   }
 
-  .featuredReport >>> .reportSubstanceDoseRoa {
+  .featuredReport :deep(.reportSubstanceDoseRoa) {
     font-size: 11pt;
     color: #666;
   }

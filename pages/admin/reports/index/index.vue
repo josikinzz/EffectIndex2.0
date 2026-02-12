@@ -52,66 +52,42 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Icon from '@/components/Icon';
 
-export default {
-  components: {
-    Icon
-  },
-  data() {
-    return {
-      reports: () => ([])
-    };
-  },
-  async fetch() {
-    try {
-      const { reports } = await this.$axios.$get('/api/reports/admin');
-      return this.reports = reports;
-    } catch (error) {
-      this.$toasted.show('There was an error fetching the reports.', { duration: 2000, type: 'error' });
-    }
-  },
-  methods: {
-    async deleteReport(id) {
+definePageMeta({ middleware: 'auth' });
 
-this.$toasted.show('Really delete?', {
-          action: [{
-              text: 'Yes, delete!',
-              onClick: async (e, toastObject) => {
-                try {
-                  await this.$store.dispatch('reports/delete', id);
-                  toastObject.goAway(0);
-                  this.$toasted.show(
-                    'The report has been successfully deleted.',
-                    {
-                      duration: 2000,
-                      type: 'success'
-                    }
-                  );
-                  this.$fetch();
-                } catch (error) {
-                  if (error.response) {
-                    this.$toasted.show(error.response.data.message,
-                    {
-                      duration: 2000,
-                      type: 'error'
-                    });
-                  } else {
-                    console.log(error);
-                  }
-                }
-              }
-            },
-            {
-              text: 'No, keep!',
-              onClick: (e, toastObject) => toastObject.goAway()
-            }]
-        });
+const apiFetch = useApiFetch();
+const { $store, $toast } = useNuxtApp();
 
-      this.$fetch();
+const { data, refresh } = await useAsyncData('admin:reports', async () => {
+  try {
+    const { reports } = await apiFetch('/api/reports/admin');
+    return { reports };
+  } catch (error) {
+    $toast?.error?.('There was an error fetching the reports.', { timeout: 2000 });
+    return { reports: [] };
+  }
+});
 
+const reports = computed(() => data.value?.reports ?? []);
 
+const loadReports = async () => {
+  await refresh();
+};
+
+const deleteReport = async (id) => {
+  if (!confirm('Really delete?')) return;
+  try {
+    await $store.dispatch('reports/delete', id);
+    $toast?.success?.('The report has been successfully deleted.', { timeout: 2000 });
+    await loadReports();
+  } catch (error) {
+    const message = error?.data?.message || error?.response?._data?.message;
+    if ($toast?.error) {
+      $toast.error(message || 'There was an error deleting the report.', { timeout: 2000 });
+    } else {
+      console.log(error);
     }
   }
 };

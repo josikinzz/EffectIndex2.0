@@ -1,6 +1,6 @@
 <template>
   <div class="adminManagement">
-    <nuxt-child />
+    <NuxtPage />
   </div>
 </template>
 

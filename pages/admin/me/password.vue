@@ -41,44 +41,43 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      oldPassword: undefined,
-      newPassword: undefined,
-      confirmation: undefined
-    };
-  },
-  head() {
-    return {
-      title: "Change Password"
-    };
-  },
-  methods: {
-    async changePassword() {
-      const { oldPassword, newPassword, confirmation } = this;
-      this.error = undefined;
+<script setup>
+definePageMeta({ middleware: 'auth' });
+useHead({ title: "Change Password" });
 
-      try {
-        await this.$axios.$post('/api/users/changePassword', { oldPassword, newPassword, confirmation });
-        this.$toasted.show('Password changed successfully.', { type: 'success', duration: 3000 });
-        this.clear();
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          this.$toasted.show(data.error.message, { type: 'error' , duration: 2000 });
-        } else {
-          console.log(error);
-        }
+const apiFetch = useApiFetch();
+const { $toast } = useNuxtApp();
+
+const oldPassword = ref(undefined);
+const newPassword = ref(undefined);
+const confirmation = ref(undefined);
+
+const changePassword = async () => {
+  try {
+    await apiFetch('/api/users/changePassword', {
+      method: 'POST',
+      body: {
+        oldPassword: oldPassword.value,
+        newPassword: newPassword.value,
+        confirmation: confirmation.value
       }
-    },
-    clear() {
-      this.oldPassword = undefined;
-      this.newPassword = undefined;
-      this.confirmation = undefined;
+    });
+    $toast?.success?.('Password changed successfully.', { timeout: 3000 });
+    clear();
+  } catch (error) {
+    const message = error?.data?.error?.message || error?.response?._data?.error?.message;
+    if ($toast?.error) {
+      $toast.error(message || 'Error changing password.', { timeout: 2000 });
+    } else {
+      console.log(error);
     }
   }
+};
+
+const clear = () => {
+  oldPassword.value = undefined;
+  newPassword.value = undefined;
+  confirmation.value = undefined;
 };
 </script>
 

@@ -9,47 +9,44 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import PersonDetails from '@/components/people/PersonDetails';
 
-export default {
-  components: {
-    PersonDetails
-  },
-  async asyncData({ $axios }) {
-    try {
-      const { person } = await $axios.$get('/api/persons/me');
+definePageMeta({ middleware: 'auth' });
+useHead({ title: "Your Profile" });
 
-      return { person: person ? person : undefined };
+const apiFetch = useApiFetch();
+const { $toast } = useNuxtApp();
 
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  head() {
-    return {
-      title: "Your Profile"
-    };
-  },
-  methods: {
-    async updateProfile(person) {
-      try {
-        await this.$axios.$post('/api/persons/me', { person });
-        this.$toasted.show('Your profile was successfully updated.', { duration: 2000, type: 'success' });
-      } catch (error) {
-        console.log(error);
-        this.$toasted.show('There was an error updating your profile.', { duration: 2000, type: 'error' });
-      }
-    },
-    async saveProfile(person) {
-      try {
-        await this.$axios.$post('/api/persons/me', { person });
-        this.$toasted.show('Your profile was successfully saved.', { duration: 2000, type: 'success' });
-      } catch(error) {
-        console.log(error);
-        this.$toasted.show('There was an error saving your profile.', { duration: 2000, type: 'error' });
-      }
-    }
+const { data } = await useAsyncData('admin:me', async () => {
+  try {
+    const { person } = await apiFetch('/api/persons/me');
+    return { person: person ? person : undefined };
+  } catch (error) {
+    console.log(error);
+    return { person: undefined };
+  }
+});
+
+const person = computed(() => data.value?.person);
+
+const updateProfile = async (payload) => {
+  try {
+    await apiFetch('/api/persons/me', { method: 'POST', body: { person: payload } });
+    $toast?.success?.('Your profile was successfully updated.', { timeout: 2000 });
+  } catch (error) {
+    console.log(error);
+    $toast?.error?.('There was an error updating your profile.', { timeout: 2000 });
+  }
+};
+
+const saveProfile = async (payload) => {
+  try {
+    await apiFetch('/api/persons/me', { method: 'POST', body: { person: payload } });
+    $toast?.success?.('Your profile was successfully saved.', { timeout: 2000 });
+  } catch (error) {
+    console.log(error);
+    $toast?.error?.('There was an error saving your profile.', { timeout: 2000 });
   }
 };
 </script>

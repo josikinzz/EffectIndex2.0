@@ -7,7 +7,7 @@
     >
     <ul class="contributorList">
       <li 
-        v-for="(contributor, index) in value"
+        v-for="(contributor, index) in currentValue"
         :key="contributor"
         class="contributorListItem"
       >
@@ -31,7 +31,12 @@ export default {
   components: {
     Icon
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
@@ -42,11 +47,18 @@ export default {
       contributorInputText: ""
     };
   },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    }
+  },
   methods: {
     changeInput(e) {
       if (e.keyCode === 13) {
-        if (this.value.indexOf(e.target.value) === -1) {
-          this.$emit("input", this.value.concat([e.target.value.trim()]));
+        if (this.currentValue.indexOf(e.target.value) === -1) {
+          const next = this.currentValue.concat([e.target.value.trim()]);
+          this.$emit("update:modelValue", next);
+          this.$emit("input", next);
         }
         this.contributorInputText = "";
       } else if (e.target.value.indexOf(",") > -1) {
@@ -58,18 +70,21 @@ export default {
         let newValue = [];
 
         arr.forEach(contributor => {
-          if (this.value.indexOf(contributor) === -1) {
+          if (this.currentValue.indexOf(contributor) === -1) {
             newValue.push(contributor);
           }
         });
 
-        this.$emit("input", this.value.concat(newValue));
+        const next = this.currentValue.concat(newValue);
+        this.$emit("update:modelValue", next);
+        this.$emit("input", next);
         this.contributorInputText = "";
       }
     },
     removeContributor(index) {
-      let newArr = this.value.slice();
+      let newArr = this.currentValue.slice();
       newArr.splice(index, 1);
+      this.$emit("update:modelValue", newArr);
       this.$emit("input", newArr);
     }
   }

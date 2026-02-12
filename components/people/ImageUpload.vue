@@ -1,7 +1,7 @@
 <template>
   <div>
     <form
-      v-if="!value"
+      v-if="!currentValue"
       @submit.prevent="upload"
     >
       <label class="uploadButton">
@@ -45,12 +45,12 @@
       class="savedImageContainer"
     >
       <img
-        :src="'/' + value"
+        :src="'/' + currentValue"
         alt="Profile Image"
       >
       <div class="controls">
         <input
-          :value="value"
+          :value="currentValue"
           class="savedImagePath"
           disabled
         >
@@ -74,7 +74,12 @@ export default {
     Cropper,
     Preview
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: String,
+      default: undefined
+    },
     value: {
       type: String,
       default: undefined
@@ -96,6 +101,9 @@ export default {
     };
   },
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
     previewUrl() {
       const { path, filename } = this.preview;
       return (path && filename) ? '/' + path + filename : undefined;
@@ -125,7 +133,11 @@ export default {
         formData.append("profileImage", input.files[0]);
         formData.append("personId", this.personId);
         try { 
-          const { path, filename } = await this.$axios.$post('/api/persons/imageUpload', formData);
+          const apiFetch = useApiFetch();
+          const { path, filename } = await apiFetch('/api/persons/imageUpload', {
+            method: 'POST',
+            body: formData
+          });
           if (path && filename) {
             this.preview.path = path;
             this.preview.filename = filename;
@@ -137,16 +149,23 @@ export default {
     },
     async handleSaveCrop() {
       try {
-        const { path, filename } = await this.$axios.$post('/api/persons/imageCrop', {
-          filename: this.preview.filename,
-          coordinates: this.result.coordinates
+        const apiFetch = useApiFetch();
+        const { path, filename } = await apiFetch('/api/persons/imageCrop', {
+          method: 'POST',
+          body: {
+            filename: this.preview.filename,
+            coordinates: this.result.coordinates
+          }
         });
-        this.$emit('input', path + filename);
+        const nextValue = path + filename;
+        this.$emit('update:modelValue', nextValue);
+        this.$emit('input', nextValue);
       } catch (error) {
         console.log(error);
       }
     },
     clearProfileImage() {
+      this.$emit('update:modelValue', undefined);
       this.$emit('input', undefined);
     }
   },

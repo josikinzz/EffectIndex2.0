@@ -1,5 +1,5 @@
 <template>
-  <Panel
+  <FrontpagePanel
     v-if="sponsorName"
     icon="heart.svg"
     :title="`Thank you ${sponsorName}!`"
@@ -27,17 +27,17 @@
         {{ sponsorName }}
       </ext-link>
     </template>
-  </Panel>
+  </FrontpagePanel>
 </template>
 
 <script>
-import Panel from '@/components/home/Panel';
+import FrontpagePanel from '@/components/home/Panel';
 import ExtLink from "@/components/ExtLink.vue";
 
 export default {
   name: "FeaturedSponsor",
   components: {
-    Panel,
+    FrontpagePanel,
     ExtLink
   },
   props: {

@@ -1,55 +1,68 @@
 <template>
   <div>
-    <h2> Login </h2>
+    <h2>Login</h2>
     <div class="login__formContainer">
       <form @submit.prevent="login">
-        <div>  
-          <label> Username
-            <input v-model="user.username">
-          </label> 
+        <div>
+          <label>
+            Username
+            <input v-model="user.username" />
+          </label>
         </div>
-        <div> 
-          <label> Password
-            <input 
-              v-model="user.password"
-              type="password"
-            >
-          </label> 
+        <div>
+          <label>
+            Password
+            <input v-model="user.password" type="password" />
+          </label>
         </div>
-        <button> Login </button>
+        <TurnstileWidget
+          :sitekey="cfSiteKey"
+          theme="light"
+          @turnstile-success="onTurnstileSuccess"
+        />
+        <button :disabled="!turnstilePassed">Login</button>
       </form>
       <p v-show="errorMessage">
-        <span class="errorMessage"> Ungood. {{ errorMessage }} </span>
+        <span class="errorMessage"> {{ errorMessage }} </span>
       </p>
     </div>
   </div>
 </template>
 
 <script>
+import TurnstileWidget from '../../../components/TurnstileWidget.vue';
 export default {
+  components: { TurnstileWidget },
+  setup() {
+    const config = useRuntimeConfig();
+    return {
+      cfSiteKey: config.public.cfSiteKey
+    };
+  },
   data() {
     return {
       user: {
         username: undefined,
         password: undefined
       },
-      errorMessage: ""
+      errorMessage: "",
+      turnstilePassed: false
     };
   },
+
   methods: {
-    async login() {
+    onTurnstileSuccess(token) {
+      // call your login function with the token
+      this.turnstilePassed = true;
+      this.login(token);
+    },
+    async login(token) {
       try {
         let response = await this.$auth.loginWith("local", {
           data: { user: this.user }
         });
 
-        this.$toasted.show(
-          'You are now logged in.',
-          {
-            duration: 2000,
-            type: 'success'
-          }
-          );
+        this.$toast.success('You are now logged in.', { timeout: 2000 });
 
       } catch (error) {
         if ("error" in error.response.data)

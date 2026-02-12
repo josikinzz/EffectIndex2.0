@@ -1,0 +1,8 @@
+const report__logBox_vue_vue_type_style_index_0_scoped_486d456c_lang = ".report__logBoxContainer[data-v-486d456c]{align-items:stretch;display:flex;flex-direction:row}.report__logBoxHeader[data-v-486d456c]{display:none;margin-bottom:0;padding:.5em}.content[data-v-486d456c]{flex:1;flex-direction:column}.logItem[data-v-486d456c]{display:flex;flex-direction:row;padding:10px}.logTime[data-v-486d456c]{color:#999;margin-right:10px;text-align:right;white-space:nowrap}@media(max-width:600px){.logItem[data-v-486d456c]{flex-direction:column}.logTime[data-v-486d456c]{text-align:left}}.logItem[data-v-486d456c]:not(:last-child){border-bottom:1px solid hsla(0,0%,67%,.35)}.logItem[data-v-486d456c]:nth-child(2n){background-color:#f6f6f6}.logDescription[data-v-486d456c]{padding:0;white-space:pre-line}.outer[data-v-486d456c]{border-right:1px solid #ccc;display:inline-block;font-weight:700;padding:60px 25px;position:relative}.rotate[data-v-486d456c]{transform:translate(-50%) translateY(-50%) rotate(-90deg)}.inner[data-v-486d456c]{font-size:25px;left:50%;letter-spacing:2px;opacity:.5;position:absolute;text-transform:uppercase;top:50%}.logTable__time[data-v-486d456c]{opacity:.5;padding-left:20px;text-align:right;vertical-align:top;white-space:nowrap}@media(max-width:600px){.outer[data-v-486d456c]{display:none}.report__logBoxHeader[data-v-486d456c]{display:block;font-weight:400;padding:.25em .5em}.logTime[data-v-486d456c]{font-size:14px}}";
+
+const report__logBoxStyles_D1_jTe24 = [
+  report__logBox_vue_vue_type_style_index_0_scoped_486d456c_lang
+];
+
+export { report__logBoxStyles_D1_jTe24 as default };
+//# sourceMappingURL=report__logBox-styles.D1_jTe24.mjs.map

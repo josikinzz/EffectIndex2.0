@@ -1,11 +1,8 @@
 <template>
-  <nuxt-child />
+  <NuxtPage />
 </template>
 
-<script>
-export default {
-  async fetch({ store }) {
-    await store.dispatch('effects/get');
-  }
-};
+<script setup>
+const { $store } = useNuxtApp();
+await useAsyncData('summaries:effects', () => $store.dispatch('effects/get'));
 </script>

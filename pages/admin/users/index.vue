@@ -5,18 +5,19 @@
       class="categoryIcon"
     />
     <h1> Users </h1>
-    <nuxt-child style="margin: 2em 0;" />
+    <NuxtPage style="margin: 2em 0;" />
   </div>
 </template>
 
 <script>
+definePageMeta({ middleware: 'auth' })
+
 import Icon from '@/components/Icon';
 
 export default {
   components: {
     Icon
   },
-  middleware: 'auth',
   scrollToTop: true,
   head() {
     return {

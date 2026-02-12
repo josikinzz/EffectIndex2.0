@@ -9,30 +9,19 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import BlogPost from "@/components/blog/Post.vue";
 
-export default {
-  components: {
-    BlogPost
-  },
-  scrollToTop: true,
-  async fetch({ store }) {
-    await store.dispatch("blog/getPosts");
-  },
-  head () {
-    return { title: "Blog" };
-  },
-  computed: {
-    blogPosts() {
-      return this.$store.state.blog.posts;
-    }
-  },
-  methods: {
-    async deletePost(id) {
-      this.$store.dispatch("blog/deletePost", id);
-    }
-  }
+definePageMeta({ scrollToTop: true });
+useHead({ title: "Blog" });
+
+const { $store } = useNuxtApp();
+await useAsyncData('blog:posts', () => $store.dispatch("blog/getPosts"));
+
+const blogPosts = computed(() => $store.state.blog.posts);
+
+const deletePost = async (id) => {
+  await $store.dispatch("blog/deletePost", id);
 };
 </script>
 

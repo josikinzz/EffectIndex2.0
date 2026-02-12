@@ -1,0 +1,8 @@
+const report__relatedEffects_vue_vue_type_style_index_0_lang = ".reportRelatedEffects{background-color:#fbfbfb;border:1px solid #ccc}.reportRelatedEffects .header{align-items:center;background-color:#eee;display:flex;flex-direction:row;padding:5px 1em}.reportRelatedEffects .title{font-size:21px;margin:0}.reportRelatedEffects .description{margin-bottom:1em;opacity:.85}.reportRelatedEffects .categories{padding:5px 1em}.reportRelatedEffects .category,.reportRelatedEffects .titleContainer{align-items:center;display:flex;flex-direction:row}.reportRelatedEffects .titleContainer{min-width:150px}@media(max-width:650px){.reportRelatedEffects .category{align-items:flex-start;flex-direction:column;margin-top:15px;padding-bottom:10px}.reportRelatedEffects .category:not(:last-child){border-bottom:1px solid #d8d8d8}.reportRelatedEffects .titleContainer{margin-bottom:10px;width:100%}}.reportRelatedEffects .titleContainer h2{font-size:18px;font-weight:400;margin-left:10px}.reportRelatedEffects .effectList{align-items:center;display:flex;flex-direction:row;flex-wrap:wrap;list-style:none;padding-left:0}.reportRelatedEffects .effect{background-color:#2e2e2e;border-radius:5px;color:#fff;cursor:pointer;display:inline-block;margin:5px 5px 5px 0;opacity:.85;padding:6px 12px;text-align:center;text-decoration:none;transition:background-color .5s}.reportRelatedEffects .effect:hover{background-color:#444}";
+
+const report__relatedEffectsStyles_DDQQXmSZ = [
+  report__relatedEffects_vue_vue_type_style_index_0_lang
+];
+
+export { report__relatedEffectsStyles_DDQQXmSZ as default };
+//# sourceMappingURL=report__relatedEffects-styles.DDQQXmSZ.mjs.map

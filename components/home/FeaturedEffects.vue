@@ -1,5 +1,5 @@
 <template>
-  <Panel
+  <FrontpagePanel
     icon="eye.svg" 
     title="Featured Effects"
     description="A selection of subjective effects that best represent the SEI"
@@ -9,35 +9,35 @@
       <div class="featuredEffectsListContainer">
         <div class="featuredEffectsCategory">
           <h4> Visual Effects </h4>
-          <nuxt-link 
+          <a
             v-for="(effect, index) in visualEffects"
             :key="effect._id"
-            :to="`/effects/${effect.url}`"
+            :href="`/effects/${effect.url}`"
           >
             {{ effect.name }}{{ (index &lt; (visualEffects.length - 1)) ? ' &sdot; ' : '' }}
-          </nuxt-link>
+          </a>
         </div>
 
         <div class="featuredEffectsCategory">
           <h4> Cognitive Effects </h4>
-          <nuxt-link 
+          <a
             v-for="(effect, index) in cognitiveEffects"
             :key="effect._id"
-            :to="`/effects/${effect.url}`"
+            :href="`/effects/${effect.url}`"
           >
             {{ effect.name }}{{ (index &lt; (cognitiveEffects.length - 1)) ? ' &sdot; ' : '' }}
-          </nuxt-link>
+          </a>
         </div>
 
         <div class="featuredEffectsCategory">
           <h4> Miscellaneous Effects </h4>
-          <nuxt-link 
+          <a
             v-for="(effect, index) in miscellaneousEffects"
             :key="effect._id"
-            :to="`/effects/${effect.url}`"
+            :href="`/effects/${effect.url}`"
           >
             {{ effect.name }}{{ (index &lt; (miscellaneousEffects.length - 1)) ? ' &sdot; ' : '' }}
-          </nuxt-link>
+          </a>
         </div>
       </div>
     </template>
@@ -46,15 +46,15 @@
         Subjective Effect Index.
       </nuxt-link>
     </template>
-  </Panel>
+  </FrontpagePanel>
 </template>
 
 <script>
-import Panel from '@/components/home/Panel';
+import FrontpagePanel from '@/components/home/Panel';
 
 export default {
   components: {
-    Panel
+    FrontpagePanel
   },
   computed: {
     featuredEffects() {

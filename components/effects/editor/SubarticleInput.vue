@@ -25,7 +25,7 @@
     <div class="valueContainer">
       <ul class="subarticleInput__list">
         <li 
-          v-for="(subarticle, index) in value"
+          v-for="(subarticle, index) in currentValue"
           :key="index"
           class="subarticleInput__listItem"
         >
@@ -59,10 +59,20 @@ export default {
   components: {
     Icon
   },
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
     value: {
       type: Array,
       default: () => []
+    }
+  },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
     }
   },
   data() {
@@ -73,20 +83,21 @@ export default {
   },
   methods: {
     addSubarticle() {
-      let currentList = this.value.slice();
+      let currentList = this.currentValue.slice();
 
       currentList.push({
         title: this.title,
         id: this.id
       });
 
+      this.$emit('update:modelValue', currentList);
       this.$emit('input', currentList);
 
       this.clearInputs();
     },
 
     moveArticleUp(index) {
-      let currentList = this.value.slice();
+      let currentList = this.currentValue.slice();
 
       if (index > 0) {
         let temp = currentList[index - 1];
@@ -94,11 +105,12 @@ export default {
         currentList[index] = temp;
       }
 
+      this.$emit('update:modelValue', currentList);
       this.$emit('input', currentList);
     },
 
     moveArticleDown(index) {
-      let currentList = this.value.slice();
+      let currentList = this.currentValue.slice();
 
       if (index < (currentList.length - 1)) {
         let temp = currentList[index + 1];
@@ -106,12 +118,14 @@ export default {
         currentList[index] = temp;
       }
 
+      this.$emit('update:modelValue', currentList);
       this.$emit('input', currentList);
     },
 
     deleteArticle(index) {
-      let currentList = this.value.slice();
+      let currentList = this.currentValue.slice();
       currentList.splice(index, 1);
+      this.$emit('update:modelValue', currentList);
       this.$emit('input', currentList);
     },
     clearInputs() {

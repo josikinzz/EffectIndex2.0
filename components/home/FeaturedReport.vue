@@ -2,11 +2,11 @@
   <div class="featuredReport">
     <div class="reportInfo">
       <div class="reportTitle">
-        <nuxt-link
-          :to="`/reports/${slug}`"
+        <a
+          :href="`/reports/${slug}`"
         >
           {{ title }}
-        </nuxt-link>
+        </a>
       </div> 
       <div class="reportAuthor">
         by <span class="reportAuthor"> {{ author }} </span>

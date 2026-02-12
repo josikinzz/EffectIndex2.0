@@ -37,7 +37,12 @@
 
 <script>
 export default {
+  emits: ['update:modelValue', 'input'],
   props: {
+    modelValue: {
+      type: String,
+      default: undefined
+    },
     value: {
       type: String,
       default: undefined
@@ -46,15 +51,23 @@ export default {
   
   data () {
     return {
-      type: {
-        type: String,
-        default: undefined
-      }
+      type: this.modelValue !== undefined ? this.modelValue : this.value
     };
+  },
+  watch: {
+    modelValue(value) {
+      this.type = value;
+    },
+    value(value) {
+      if (this.modelValue === undefined) {
+        this.type = value;
+      }
+    }
   },
 
   methods: {
     handleChange(e) {
+      this.$emit('update:modelValue', this.type);
       this.$emit('input', this.type);
     }
   }

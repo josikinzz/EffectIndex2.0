@@ -50,73 +50,42 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Icon from '@/components/Icon';
 import fecha from "fecha";
 
-export default {
-  components: {
-    Icon
-  },
-  data() {
-    return {
-      articles: undefined
-    };
-  },
-  async fetch() {
-    try {
-      const results = await this.$axios.get('/api/articles/admin');
-      const { articles } = results.data;
-      this.articles = articles;
-    } catch (error) {
+definePageMeta({ middleware: 'auth' });
+
+const apiFetch = useApiFetch();
+const { $toast } = useNuxtApp();
+
+const { data, refresh } = await useAsyncData('admin:articles', async () => {
+  const { articles } = await apiFetch('/api/articles/admin');
+  return { articles };
+});
+
+const articles = computed(() => data.value?.articles ?? []);
+
+const loadArticles = async () => {
+  await refresh();
+};
+
+const formatDate = (date) => {
+  return date ? fecha.format(new Date(date), "dddd, MMMM DD YYYY") : undefined;
+};
+
+const deleteArticle = async (id) => {
+  if (!confirm('Really delete?')) return;
+  try {
+    await apiFetch(`/api/articles/${id}`, { method: 'DELETE' });
+    $toast?.success?.('The report has been successfully deleted.', { timeout: 2000 });
+    await loadArticles();
+  } catch (error) {
+    const message = error?.data?.message || error?.response?._data?.message;
+    if ($toast?.error) {
+      $toast.error(message || 'There was an error deleting the article.', { timeout: 2000 });
+    } else {
       console.log(error);
-    }
-  },
-  methods: {
-    formatDate(date) {
-      return date ? fecha.format(new Date(date), "dddd, MMMM DD YYYY") : undefined;
-    },
-    async deleteArticle(id) {
-      try {
-        
-        this.$toasted.show('Really delete?', {
-          action: [{
-              text: 'Yes, delete!',
-              onClick: async (e, toastObject) => {
-                try {
-                  await this.$axios.delete(`/api/articles/${id}`);
-                  toastObject.goAway(0);
-                  this.$toasted.show(
-                    'The report has been successfully deleted.',
-                    {
-                      duration: 2000,
-                      type: 'success'
-                    }
-                  );
-                  this.$fetch();
-                } catch (error) {
-                  if (error.response) {
-                    this.$toasted.show(error.response.data.message, 
-                    {
-                      duration: 2000,
-                      type: 'error'
-                    });
-                  } else {
-                    console.log(error);
-                  }
-                }
-              }
-            },
-            {
-              text: 'No, keep!',
-              onClick: (e, toastObject) => toastObject.goAway()
-            }]
-        });        
-      } catch (error) {
-        console.log(error);
-      }
-
-
     }
   }
 };

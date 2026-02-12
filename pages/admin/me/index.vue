@@ -27,8 +27,9 @@
 </template>
 
 <script>
+definePageMeta({ middleware: 'auth' })
+
 export default {
-  middleware: 'auth',
   head() {
     return {
       title: "Manage User"

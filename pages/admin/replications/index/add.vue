@@ -9,13 +9,14 @@
 </template>
 
 <script>
+definePageMeta({ middleware: 'auth' })
+
 import ReplicationEditor from "@/components/replications/ReplicationEditor";
 
 export default {
   components: {
     ReplicationEditor
   },
-  middleware: ["auth"],
   methods: {
     async submitReplication(replication) {
       try {

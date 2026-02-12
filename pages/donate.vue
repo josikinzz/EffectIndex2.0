@@ -61,24 +61,15 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import ExtLink from "@/components/ExtLink";
 import Icon from '@/components/Icon';
 import FrontpageArticle from "@/components/home/FrontpageArticle";
 
-export default {
-  components: {
-    FrontpageArticle,
-    ExtLink,
-    Icon
-  },
-  async fetch ( { store } ) { await store.dispatch('articles/get'); },
-  head() {
-    return {
-      title: "Donate"
-    };
-  },
-};
+useHead({ title: "Donate" });
+
+const { $store } = useNuxtApp();
+await useAsyncData('donate:articles', () => $store.dispatch('articles/get'));
 </script>
 
 <style scoped>

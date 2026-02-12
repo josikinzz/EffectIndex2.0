@@ -26,123 +26,44 @@
   </div>
 </template>
 
-<script>
+<script setup>
+definePageMeta({ middleware: 'auth', scrollToTop: true });
+
 import EffectTableRow from "@/components/effects/EffectTableRow.vue";
 
-export default {
-  components: {
-    EffectTableRow
-  },
-  middleware: ["auth"],
-  scrollToTop: true,
-  data() {
-    return {
-      filter: ""
-    };
-  },
-  computed: {
-    filteredEffects() {
-      return this.filter
-        ? this.$store.state.effects.list.filter(effect =>
-            effect.tags.some(tag => tag.indexOf(this.filter) > -1)
-          )
-        : this.$store.state.effects.list;
-    },
-    canDelete() {
-      return this.$auth.hasScope('admin-effects');
-    }
-  },
-  mounted() {
-    this.$store.dispatch("effects/get");
-  },
-  methods: {
-    deleteEffect(id) {
+const { $store, $auth, $toast } = useNuxtApp();
+const filter = ref("");
 
+await useAsyncData('admin:effects', () => $store.dispatch("effects/get"));
 
- try {
+const filteredEffects = computed(() => {
+  return filter.value
+    ? $store.state.effects.list.filter(effect =>
+        effect.tags.some(tag => tag.indexOf(filter.value) > -1)
+      )
+    : $store.state.effects.list;
+});
 
-        this.$toasted.show('Really delete?', {
-          action: [{
-              text: 'Yes, delete!',
-              onClick: async (e, toastObject) => {
-                try {
-                  await this.$store.dispatch("effects/delete", id);
-                  toastObject.goAway(0);
-                  this.$toasted.show(
-                    'The effect has been successfully deleted.',
-                    {
-                      duration: 2000,
-                      type: 'success'
-                    }
-                  );
-                  this.$store.dispatch("effects/get");
-                } catch (error) {
-                  if (error.response) {
-                    this.$toasted.show(error.response.data.message,
-                    {
-                      duration: 2000,
-                      type: 'error'
-                    });
-                  } else {
-                    console.log(error);
-                  }
-                }
-              }
-            },
-            {
-              text: 'No, keep!',
-              onClick: (e, toastObject) => toastObject.goAway()
-            }]
-        });
-      } catch (error) {
-        console.log(error);
-      }
+const canDelete = computed(() => $auth.hasScope('admin-effects'));
 
-
-//  try {
-
-//         this.$toasted.show('Really delete?', {
-//           action: [{
-//               text: 'Yes, delete!',
-//               onClick: async (e, toastObject) => {
-//                 try {
-//                   await this.$axios.delete(`/api/articles/${id}`);
-//                   toastObject.goAway(0);
-//                   this.$toasted.show(
-//                     'The report has been successfully deleted.',
-//                     {
-//                       duration: 2000,
-//                       type: 'success'
-//                     }
-//                   );
-//                   this.$fetch();
-//                 } catch (error) {
-//                   if (error.response) {
-//                     this.$toasted.show(error.response.data.message,
-//                     {
-//                       duration: 2000,
-//                       type: 'error'
-//                     });
-//                   } else {
-//                     console.log(error);
-//                   }
-//                 }
-//               }
-//             },
-//             {
-//               text: 'No, keep!',
-//               onClick: (e, toastObject) => toastObject.goAway()
-//             }]
-//         });
-//       } catch (error) {
-//         console.log(error);
-//       }
-
-    },
-    clearFilter() {
-      this.filter = "";
+const deleteEffect = async (id) => {
+  if (!confirm('Really delete?')) return;
+  try {
+    await $store.dispatch("effects/delete", id);
+    $toast?.success?.('The effect has been successfully deleted.', { timeout: 2000 });
+    await $store.dispatch("effects/get");
+  } catch (error) {
+    const message = error?.data?.message || error?.response?._data?.message;
+    if ($toast?.error) {
+      $toast.error(message || 'There was an error deleting the effect.', { timeout: 2000 });
+    } else {
+      console.log(error);
     }
   }
+};
+
+const clearFilter = () => {
+  filter.value = "";
 };
 </script>
 
