@@ -20,7 +20,7 @@ const router = useRouter();
 const { $store } = useNuxtApp();
 
 const { data } = await useAsyncData(
-  'blog:post',
+  `blog:post:${String(route.params.slug || '')}`,
   async () => {
     try {
       return await $store.dispatch("blog/getPost", route.params.slug);

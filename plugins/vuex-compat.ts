@@ -14,33 +14,46 @@ import { useReportsStore } from '~/stores/reports'
 import { useSearchStore } from '~/stores/search'
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const stores = {
-    admin: useAdminStore(),
-    articles: useArticlesStore(),
-    blog: useBlogStore(),
-    effects: useEffectsStore(),
-    gallery: useGalleryStore(),
-    modal: useModalStore(),
-    navigation: useNavigationStore(),
-    profiles: useProfilesStore(),
-    pullout_menu: usePulloutMenuStore(),
-    redirects: useRedirectsStore(),
-    replications: useReplicationsStore(),
-    reports: useReportsStore(),
-    search: useSearchStore()
+  const storeFactories = {
+    admin: useAdminStore,
+    articles: useArticlesStore,
+    blog: useBlogStore,
+    effects: useEffectsStore,
+    gallery: useGalleryStore,
+    modal: useModalStore,
+    navigation: useNavigationStore,
+    profiles: useProfilesStore,
+    pullout_menu: usePulloutMenuStore,
+    redirects: useRedirectsStore,
+    replications: useReplicationsStore,
+    reports: useReportsStore,
+    search: useSearchStore
+  } as const
+
+  type Namespace = keyof typeof storeFactories
+  const stores = {} as Record<Namespace, any>
+
+  const resolveStore = (namespace: Namespace) => {
+    if (!stores[namespace]) {
+      stores[namespace] = storeFactories[namespace]()
+    }
+    return stores[namespace]
   }
 
   const state = reactive({}) as Record<string, any>
-  Object.entries(stores).forEach(([key, store]) => {
+  ;(Object.keys(storeFactories) as Namespace[]).forEach((key) => {
     Object.defineProperty(state, key, {
       enumerable: true,
-      get: () => store.$state
+      get: () => resolveStore(key).$state
     })
   })
 
   const dispatch = (type: string, payload?: any) => {
     const [namespace, action] = type.split('/')
-    const store = stores[namespace as keyof typeof stores]
+    if (!(namespace in storeFactories)) {
+      throw new Error(`Unknown action: ${type}`)
+    }
+    const store = resolveStore(namespace as Namespace)
     if (!store || typeof (store as any)[action] !== 'function') {
       throw new Error(`Unknown action: ${type}`)
     }
@@ -49,7 +62,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const commit = (type: string, payload?: any) => {
     const [namespace, mutation] = type.split('/')
-    const store = stores[namespace as keyof typeof stores]
+    if (!(namespace in storeFactories)) {
+      throw new Error(`Unknown mutation: ${type}`)
+    }
+    const store = resolveStore(namespace as Namespace)
     if (!store || typeof (store as any)[mutation] !== 'function') {
       throw new Error(`Unknown mutation: ${type}`)
     }
@@ -57,9 +73,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   const subscribe = (callback: (mutation: { type: string }, state: any) => void) => {
-    const unsubscribes = Object.values(stores).map((store) =>
+    const unsubscribes = (Object.keys(storeFactories) as Namespace[]).map((namespace) => {
+      const store = resolveStore(namespace)
       store.$subscribe(() => callback({ type: `${store.$id}/patch` }, state))
-    )
+    })
     return () => unsubscribes.forEach((unsub) => unsub())
   }
 

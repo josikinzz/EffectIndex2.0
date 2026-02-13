@@ -23,7 +23,7 @@ import CaptionedImage from "@/components/CaptionedImage";
 const route = useRoute();
 const apiFetch = useApiFetch();
 const { data } = await useAsyncData(
-  'people:profile',
+  `people:profile:${String(route.params.url || '')}`,
   async () => {
     try {
       return await apiFetch(`/api/persons/${route.params.url}`);

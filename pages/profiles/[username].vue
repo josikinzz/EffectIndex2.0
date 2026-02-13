@@ -34,20 +34,26 @@ import LightBox from "@/components/gallery/LightBox.vue";
 definePageMeta({ scrollToTop: true });
 
 const route = useRoute();
-const { $store } = useNuxtApp();
+const apiFetch = useApiFetch();
 
 const { data } = await useAsyncData(
-  'profiles:detail',
+  `profiles:detail:${String(route.params.username || '')}`,
   async () => {
     const username = route.params.username;
-    const { profile } = await $store.dispatch("profiles/getProfileByName", username);
+    const { profile } = await apiFetch(`/api/profiles/user/${username}`);
+
     if (!profile) {
       return { profile: {}, replications: [] };
     }
-    const { replications } = await $store.dispatch(
-      "replications/getReplicationsByArtist",
-      username
-    );
+
+    let replications = [];
+    try {
+      const payload = await apiFetch(`/api/replications/byartist/${username}`);
+      replications = Array.isArray(payload?.replications) ? payload.replications : [];
+    } catch {
+      replications = [];
+    }
+
     return { profile, replications };
   },
   { watch: [() => route.params.username] }

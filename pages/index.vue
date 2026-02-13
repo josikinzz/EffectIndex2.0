@@ -54,17 +54,37 @@ const formatFailure = (reason) => {
   return `${statusCode ? `${statusCode} ` : ''}${errorName}: ${message}`;
 };
 
-const { data: prefetchData } = await useAsyncData('home:prefetch', async () => {
-  const prefetchTasks = [
-    { label: 'effects', promise: $store.dispatch("effects/get") },
-    { label: 'replications', promise: $store.dispatch("replications/featured") },
-    { label: 'reports', promise: $store.dispatch("reports/get") },
-    { label: 'articles', promise: $store.dispatch("articles/get") }
-  ];
+const runHomePrefetch = async (onlyMissing = false) => {
+  const tasks = [
+    {
+      label: 'effects',
+      needsFetch: () => !$store.state.effects.list.length,
+      promise: () => $store.dispatch("effects/get")
+    },
+    {
+      label: 'replications',
+      needsFetch: () => !$store.state.replications.list.length,
+      promise: () => $store.dispatch("replications/featured")
+    },
+    {
+      label: 'reports',
+      needsFetch: () => !$store.state.reports.list.length,
+      promise: () => $store.dispatch("reports/get")
+    },
+    {
+      label: 'articles',
+      needsFetch: () => !$store.state.articles.list.length,
+      promise: () => $store.dispatch("articles/get")
+    }
+  ].filter((task) => !onlyMissing || task.needsFetch());
 
-  const results = await Promise.allSettled(prefetchTasks.map(task => task.promise));
+  if (tasks.length === 0) {
+    return { message: '' };
+  }
+
+  const results = await Promise.allSettled(tasks.map((task) => task.promise()));
   const failed = results
-    .map((result, index) => ({ result, label: prefetchTasks[index].label }))
+    .map((result, index) => ({ result, label: tasks[index].label }))
     .filter((entry) => entry.result.status === 'rejected');
 
   if (failed.length === 0) {
@@ -79,9 +99,26 @@ const { data: prefetchData } = await useAsyncData('home:prefetch', async () => {
     message: `Some homepage content is unavailable. ${failureDetails}. ` +
       `Check /api/health for database status when running locally.`
   };
+};
+
+const { data: prefetchData } = await useAsyncData('home:prefetch', async () => {
+  return runHomePrefetch(false);
+}, {
+  // Route payload hydration from non-home pages can overwrite shared store lists
+  // with empty arrays; disable async-data cache reuse so home prefetch always runs.
+  getCachedData: () => null
 });
 
-const prefetchMessage = computed(() => prefetchData.value?.message || '');
+const clientPrefetchMessage = ref('');
+
+onMounted(async () => {
+  const { message } = await runHomePrefetch(true);
+  clientPrefetchMessage.value = message || '';
+});
+
+const prefetchMessage = computed(() => {
+  return clientPrefetchMessage.value || prefetchData.value?.message || '';
+});
 
 const imageReplications = computed(() => {
   return $store.state.replications.list.filter((replication) => replication.type === 'image');

@@ -36,9 +36,6 @@
             > {{ report.person.full_name || report.person.alias }} </nuxt-link>
             <span v-else> {{ report.person.full_name || report.person.alias }} </span>
           </span>
-          <span v-else-if="profile">
-            by <nuxt-link :to="'/profiles/' + profile.username"> {{ report.subject.name }} </nuxt-link>
-          </span>
           <span v-else>
             by {{ report.subject.name }}
           </span>
@@ -55,7 +52,6 @@
 
     <div class="report__topSection">
       <subject-box
-        :profile="profile"
         :subject="report.subject"
       />
       <substances-box :substances="report.substances" />
@@ -119,7 +115,7 @@ import Icon from "@/components/Icon";
 definePageMeta({ scrollToTop: true });
 
 const route = useRoute();
-const { $store } = useNuxtApp();
+const apiFetch = useApiFetch();
 
 const defaultReport = {
   _id: '',
@@ -137,29 +133,26 @@ const defaultReport = {
 };
 
 const { data } = await useAsyncData(
-  'reports:detail',
+  `reports:detail:${String(route.params.slug || '')}`,
   async () => {
-    const report = await $store.dispatch("reports/getReportBySlug", route.params.slug);
-    if (!report) {
+    const { report } = await apiFetch(`/api/reports/slug/${route.params.slug}`);
+    if (!report || report.unpublished === true) {
       throw createError({ statusCode: 404, statusMessage: "That report does not exist." });
     }
-    await $store.dispatch("profiles/get");
-    return { report };
+    return report;
   },
   { watch: [() => route.params.slug] }
 );
 
-const report = computed(() => data.value?.report || defaultReport);
-
-const profile = computed(() => {
-  const profiles = $store.state.profiles.list;
-  return profiles.find(profile => profile.username === report.value.subject.name);
-});
+const report = computed(() => data.value || defaultReport);
 
 const description = computed(() => {
-  const substances = report.value.substances.map((substance) => substance.name);
+  const substances = Array.isArray(report.value.substances)
+    ? report.value.substances.map((substance) => substance.name)
+    : [];
   const substanceList = substances.join(', ');
-  return `A ${substanceList} report from ${report.value.subject.name} on Effect Index.`;
+  const subjectName = report.value.subject?.name || '';
+  return `A ${substanceList} report from ${subjectName} on Effect Index.`;
 });
 
 const hasRelatedEffects = computed(() => {
@@ -170,9 +163,9 @@ useHead(() => ({
   title: report.value.title,
   meta: [
     { name: 'description', hid: 'description', content: description.value },
-    { name: 'og:title', hid: 'og:title', content: `Effect Index - Trip Report - ${report.value.title} by ${report.value.subject.name}` },
+    { name: 'og:title', hid: 'og:title', content: `Effect Index - Trip Report - ${report.value.title} by ${report.value.subject?.name || ''}` },
     { name: 'og:description', hid: 'og:description', content: description.value },
-    { name: 'twitter:title', hid: 'twitter:title', content: `Effect Index - Trip Report - ${report.value.title} by ${report.value.subject.name}` },
+    { name: 'twitter:title', hid: 'twitter:title', content: `Effect Index - Trip Report - ${report.value.title} by ${report.value.subject?.name || ''}` },
     { name: 'twitter:description', hid: 'twitter:description', content: description.value },
   ]
 }));

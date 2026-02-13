@@ -211,7 +211,7 @@ const defaultEffect = {
 };
 
 const { data, error } = await useAsyncData(
-  'effects:detail',
+  `effects:detail:${String(route.params.name || '')}`,
   async () => {
     const { effect } = await apiFetch(`/api/effects/${route.params.name}`);
     if (!effect) {

@@ -76,7 +76,7 @@ const defaultArticle = {
 const route = useRoute();
 const apiFetch = useApiFetch();
 const { data: articleData, error } = await useAsyncData(
-  'article',
+  `article:${String(route.params.slug || '')}`,
   () => apiFetch(`/api/articles/${route.params.slug}`),
   { watch: [() => route.params.slug] }
 );

@@ -164,8 +164,10 @@ const options = reactive({
 });
 
 await useAsyncData('admin:replications', async () => {
-  await $store.dispatch("replications/get");
-  await $store.dispatch("effects/get");
+  await Promise.all([
+    $store.dispatch("replications/get"),
+    $store.dispatch("effects/get")
+  ]);
   return {};
 });
 

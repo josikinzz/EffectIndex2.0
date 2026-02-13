@@ -23,8 +23,11 @@ useHead({ title: "Audio Replications" });
 
 const { $store } = useNuxtApp();
 await useAsyncData('replications:audio', async () => {
-  await $store.dispatch("replications/get");
-  await $store.dispatch("effects/get");
+  // Trigger both actions before awaiting to keep Nuxt composable context intact.
+  await Promise.all([
+    $store.dispatch("replications/get"),
+    $store.dispatch("effects/get")
+  ]);
   return {};
 });
 

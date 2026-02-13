@@ -100,8 +100,11 @@ useHead({ title: "Trip Reports" });
 
 const { $store } = useNuxtApp();
 await useAsyncData('reports:list', async () => {
-  await $store.dispatch("reports/get");
-  await $store.dispatch("profiles/get");
+  // Trigger both actions before awaiting to keep Nuxt composable context intact.
+  await Promise.all([
+    $store.dispatch("reports/get"),
+    $store.dispatch("profiles/get")
+  ]);
   return {};
 });
 

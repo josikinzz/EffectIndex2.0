@@ -12,7 +12,7 @@
     "dev": "nuxt dev",
     "prebuild": "npm run build:static-data",
     "build": "nuxt build",
-    "start": "node .output/server/index.mjs",
+    "start": "node scripts/start.mjs",
     "build:static-data": "node scripts/build-static-data.mjs",
     "generate": "npm run build:static-data && nuxi generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
