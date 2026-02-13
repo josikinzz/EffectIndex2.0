@@ -49,6 +49,7 @@ const browserBaseUrl = (process.env.BROWSER_BASE_URL || baseUrl).replace(/\/$/, 
 const sitemapApiBaseUrl = (process.env.SITEMAP_API_BASE_URL || baseUrl).replace(/\/$/, '')
 const browseOnlyMode = parseBooleanEnv(process.env.BROWSE_ONLY_MODE, true)
 const enableSitemap = parseBooleanEnv(process.env.ENABLE_SITEMAP, false)
+const defaultSiteDescription = 'A resource dedicated to establishing the field of formalised subjective effect documentation.'
 const prerenderRoutes = loadPrerenderRoutes(resolve(process.cwd(), '.generated/prerender-routes.json'))
 const require = createRequire(import.meta.url)
 const backendPath = resolve(process.cwd(), 'backend/index.js')
@@ -67,12 +68,25 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      titleTemplate: '%s - Effect Index',
+      titleTemplate: (titleChunk?: string | null) => {
+        if (!titleChunk || titleChunk === 'Effect Index') return 'Effect Index'
+        return `${titleChunk} - Effect Index`
+      },
       title: 'Effect Index',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { hid: 'description', name: 'description', content: 'A nuxt.js-based content management system designed for effectindex.com' }
+        { hid: 'description', name: 'description', content: defaultSiteDescription },
+        { hid: 'og:title', property: 'og:title', content: 'Effect Index' },
+        { hid: 'og:description', property: 'og:description', content: defaultSiteDescription },
+        { hid: 'og:type', property: 'og:type', content: 'website' },
+        { hid: 'og:url', property: 'og:url', content: 'https://effectindex.com' },
+        { hid: 'og:image', property: 'og:image', content: 'https://effectindex.com/logo-letter.png' },
+        { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
+        { hid: 'twitter:title', name: 'twitter:title', content: 'Effect Index' },
+        { hid: 'twitter:description', name: 'twitter:description', content: defaultSiteDescription },
+        { hid: 'twitter:image', name: 'twitter:image', content: 'https://effectindex.com/logo-letter.png' },
+        { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Effect Index Logo' }
       ],
       link: [
         {
