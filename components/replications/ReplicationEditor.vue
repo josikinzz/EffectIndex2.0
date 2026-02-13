@@ -116,13 +116,13 @@
       class="replicationEditor__gfycatPreview"
     >
       <iframe
-        :src="'https://streamable.com/e/' + resource + '?autoplay=1&loop=1'"
+        :src="'https://streamable.com/e/' + resource + '?autoplay=1&loop=1&muted=1&nocontrols=1'"
         frameborder="0"
         scrolling="no"
         height="200"
       />
       <iframe
-        :src="'https://streamable.com/e/' + resource + '?autoplay=1&loop=1'"
+        :src="'https://streamable.com/e/' + resource + '?autoplay=1&loop=1&muted=1&nocontrols=1'"
         frameborder="0"
         scrolling="no"
         height="200"

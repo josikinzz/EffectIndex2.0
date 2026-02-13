@@ -14,18 +14,15 @@
           :children="item.children"
         />
       </ul>
-      <donate-button style="margin-top: 1.5em; margin-left: 40px;" />
     </div>
   </div>
 </template>
 
 <script>
-import DonateButton from "@/components/header/headerNav__donateButton";
 import PulloutItem from "./pulloutMenu__item.vue";
 
 export default {
   components: {
-    DonateButton,
     PulloutItem
   },
   computed: {

@@ -1,0 +1,1 @@
+import{_ as t,o,c as n,g as s}from"./DdQnp8wQ.js";const _={props:{href:{type:String,default:""}}},a=["href"];function c(e,f,r,p,l,d){return o(),n("a",{href:r.href,target:"_blank",rel:"noreferrer"},[s(e.$slots,"default")],8,a)}const i=t(_,[["render",c]]);export{i as _};

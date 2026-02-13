@@ -23,8 +23,7 @@
 "Trip Reports": {
   "location": "/reports",
   "children": [
-    { "name": "Trip Reports", "location": "/reports" },
-    { "name": "Submit Report", "location": "https://rc.community/submit-report", "external": true }
+    { "name": "Trip Reports", "location": "/reports" }
   ]
 },
   "Project": {
@@ -34,15 +33,7 @@
       { "name": "Articles", "location": "/articles" },
       { "name": "Blog", "location": "/blog" },
       { "name": "Search", "location": "/search" },
-      { "name": "Github", "location": "https://github.com/effectindex/EffectIndex", "external": true }
-    ]
-  },
-  "Community": {
-    "location": "/discord",
-    "children": [
-      { "name": "People", "location": "/people" },
-      { "name": "Discord", "location": "/discord" },
-      { "name": "Contact", "location": "/contact" }
+      { "name": "Github", "location": "https://github.com/josikinzz/EffectIndex2.0", "external": true }
     ]
   }
 }

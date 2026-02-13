@@ -1,0 +1,1 @@
+import{q as o,s as c,o as n,h as _,P as r}from"./DdQnp8wQ.js";import{u as p}from"./DieWdjBu.js";const h={__name:"index",async setup(m){let t,e;const{$store:s}=o();return[t,e]=c(()=>p("summaries:effects",()=>s.dispatch("effects/get"))),await t,e(),(u,f)=>{const a=r;return n(),_(a)}}};export{h as default};

@@ -17,7 +17,7 @@
           style="position:relative; height: 300px;"
         >
           <iframe
-            :src="`https://streamable.com/e/${replication.resource}?autoplay=1&loop=1`"
+            :src="`https://streamable.com/e/${replication.resource}?autoplay=1&loop=1&muted=1&nocontrols=1`"
             frameborder="0"
             scrolling="no"
             width="100%"

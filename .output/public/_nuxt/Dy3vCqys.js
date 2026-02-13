@@ -1,1 +1,0 @@
-import{u as o,q as c,s as n,o as _,c as r,b as p,P as u}from"./PhNZAdwz.js";import{u as i}from"./D9lMb8_o.js";const g={__name:"index",async setup(m){let e,t;o({title:"Categories"});const{$store:s}=c();return[e,t]=n(()=>i("categories:effects",()=>s.dispatch("effects/get"))),await e,t(),(f,l)=>{const a=u;return _(),r("div",null,[p(a)])}}};export{g as default};

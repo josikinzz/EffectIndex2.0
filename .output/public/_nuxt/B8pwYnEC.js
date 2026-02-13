@@ -1,0 +1,1 @@
+import{_ as c,o as r,c as o,t as n}from"./DdQnp8wQ.js";const i={props:{value:{type:String,default:""}},methods:{clickTag(e){this.$router.push("/search?q="+e)}}};function l(e,t,a,p,u,s){return r(),o("div",{class:"effectDescription__tag",onClick:t[0]||(t[0]=_=>s.clickTag(a.value))},n(a.value),1)}const d=c(i,[["render",l]]);export{d as T};

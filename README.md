@@ -6,7 +6,7 @@
 
 1. Install Git and Node 22 (LTS)
 2. (optional) Install and run MongoDB only if you need to regenerate static content from a local database.
-3. `git clone https://github.com/effectindex/EffectIndex`
+3. `git clone https://github.com/josikinzz/EffectIndex2.0`
 4. `cd EffectIndex`
 5. If you use `nvm`, run `nvm use` to pick up the Node version in `.nvmrc`
 6. `npm install`

@@ -25,7 +25,7 @@
           alt="Reddit"
         >
       </a>
-      <a href="https://github.com/effectindex/EffectIndex">
+      <a href="https://github.com/josikinzz/EffectIndex2.0">
         <img
           src="/sm-icon-github.svg"
           height="32"

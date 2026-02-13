@@ -1,8 +1,0 @@
-const donate_vue_vue_type_style_index_0_scoped_377443d7_lang = ".float[data-v-377443d7]{float:right}.text-centered[data-v-377443d7]{text-align:center}.crypto-donation[data-v-377443d7]{align-items:center;display:flex;flex-direction:row;gap:50px;max-width:300px}.crypto-donation h2[data-v-377443d7]{font-size:20px}@media(max-width:500px){.float[data-v-377443d7]{float:none;margin:1em auto}.crypto-donation[data-v-377443d7]{display:flex;flex-direction:column;gap:25px;justify-content:center;max-width:none;padding:1em;text-align:center}.crypto-donation h2[data-v-377443d7]{font-size:16px}}";
-
-const donateStyles__2PxVL5w = [
-  donate_vue_vue_type_style_index_0_scoped_377443d7_lang
-];
-
-export { donateStyles__2PxVL5w as default };
-//# sourceMappingURL=donate-styles._2PxVL5w.mjs.map

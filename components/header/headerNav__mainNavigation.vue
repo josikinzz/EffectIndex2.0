@@ -9,18 +9,15 @@
       :sub-menu-items="navItem.children"
       :scope="navItem.scope"
     />
-    <donate-button style="margin-left: 20px" />
   </div>
 </template>
 
 <script>
 import MenuItem from "@/components/header/headerNav__menuItem";
-import DonateButton from "@/components/header/headerNav__donateButton";
 
 export default {
   components: {
-    MenuItem,
-    DonateButton
+    MenuItem
   },
   data() {
     return {

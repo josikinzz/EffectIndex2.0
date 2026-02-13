@@ -1,1 +1,0 @@
-import{s as a,o as c,c as r,H as s}from"./PhNZAdwz.js";const l={__name:"clinical",async setup(n){let e,t;return[e,t]=a(()=>s("/",{replace:!0})),await e,t(),(o,_)=>(c(),r("div"))}};export{l as default};
